@@ -2,11 +2,13 @@
 # minecraft
 mizule = "0.0.1-v193-SNAPSHOT"
 minecraft = "1.21"
+hangar-publish = "0.1.2"
 
 [libraries]
 
 
 [plugins]
+hangar-publish = { id = "io.papermc.hangar-publish-plugin", version = "0.1.2" }
 mizule-root = { id = "dev.mizule.mizule-build-logic.root", version.ref = "mizule" }
 mizule-base = { id = "dev.mizule.mizule-build-logic", version.ref = "mizule" }
 mizule-kotlin = { id = "dev.mizule.mizule-build-logic.kotlin", version.ref = "mizule" }

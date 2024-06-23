@@ -5,6 +5,7 @@ plugins {
     id(libs.plugins.mizule.platform.paper.get().pluginId)
     id(libs.plugins.mizule.kotlin.get().pluginId)
     id(libs.plugins.mizule.gremlin.get().pluginId)
+    alias(libs.plugins.hangar.publish)
 }
 
 dependencies {
@@ -18,11 +19,32 @@ dependencies {
 
 mizule {
     shadowOptions.enableShadow.set(true)
-    archiveFileName = "mServerLinks-Paper.jar"
+    archiveFileName = "mServerLinks-Paper-{version}.jar"
     enableCopyTask = true
+
+    versions {
+        kotlin.set("1.9.24")
+        includeCommitHash.set(true)
+//        buildCommitsSinceLatestTag.set(true)
+    }
 }
 
 mizulePaperPlatform {
     this.version.set(libs.versions.minecraft.get())
     this.commonPlugins.set(false)
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version = project.version as String
+        id = "mServerLinks"
+        channel = if (project.version.toString().contains("SNAPSHOT")) "Snapshot" else "Release"
+        changelog.set(project.rootProject.file("CHANGELOG.md").readText())
+        platforms {
+            paper {
+                jar = mizule.archiveFile
+                platformVersions = listOf("1.21")
+            }
+        }
+    }
 }
