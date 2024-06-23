@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.paper
 
@@ -26,6 +27,16 @@ mizule {
         kotlin.set("1.9.24")
         includeCommitHash.set(true)
 //        buildCommitsSinceLatestTag.set(true)
+    }
+}
+
+tasks {
+    afterEvaluate {
+        named("shadowJar", ShadowJar::class) {
+            manifest { // Make this efault in gradle plugin
+                attributes("paperweight-mappings-namespace" to "mojang")
+            }
+        }
     }
 }
 
