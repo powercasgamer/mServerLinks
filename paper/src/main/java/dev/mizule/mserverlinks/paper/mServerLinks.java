@@ -65,6 +65,7 @@ public class mServerLinks extends JavaPlugin {
     public void onEnable() {
         getLogger().info("mServerLinks has been enabled!");
         if (this.config.bStats()) {
+            getSLF4JLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
             if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
                 final Metrics metrics = new Metrics(this, 22368);
             } else {
@@ -73,6 +74,7 @@ public class mServerLinks extends JavaPlugin {
         }
 
         if (this.config.updateChecker()) {
+            getSLF4JLogger().info("UpdateChecker has been enabled, to disable it set 'update-checker' to false in the config!");
             Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
                 checkUpdate();
             }, 0, 1, TimeUnit.HOURS);

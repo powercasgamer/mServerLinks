@@ -27,6 +27,7 @@ package dev.mizule.mserverlinks.paper.config
 import org.bukkit.ServerLinks
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment
+import org.spongepowered.configurate.objectmapping.meta.Setting
 import java.net.URI
 
 @ConfigSerializable
@@ -53,6 +54,7 @@ data class Config(
 
 
     val updateChecker: Boolean = true,
+    @Setting(value = "bStats")
     val bStats: Boolean = true,
 )
 
