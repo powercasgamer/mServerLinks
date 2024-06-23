@@ -24,10 +24,12 @@
  */
 package dev.mizule.mserverlinks.paper;
 
+import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigManager;
 import dev.mizule.mserverlinks.paper.config.Config;
 import dev.mizule.mserverlinks.paper.config.Link;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -56,6 +58,11 @@ public class mServerLinks extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("mServerLinks has been enabled!");
+        if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
+            final Metrics metrics = new Metrics(this, 22368);
+        } else {
+            getSLF4JLogger().warn("You are running a development build of mServerLinks, metrics are disabled!");
+        }
 
         for (final Map.Entry<String, Link> entry : this.config.links().entrySet()) {
             final String name = entry.getKey();
