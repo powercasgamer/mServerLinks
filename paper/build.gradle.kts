@@ -45,16 +45,18 @@ mizulePaperPlatform {
     this.commonPlugins.set(false)
 }
 
-hangarPublish {
-    publications.register("plugin") {
-        version = project.version as String
-        id = "mServerLinks"
-        channel = if (project.version.toString().contains("SNAPSHOT")) "Beta" else "Release"
-        changelog.set(project.rootProject.file("CHANGELOG.md").readText())
-        platforms {
-            paper {
-                jar = mizule.archiveFile
-                platformVersions = listOf("1.21")
+afterEvaluate {
+    hangarPublish {
+        publications.register("plugin") {
+            version = project.version as String
+            id = "mServerLinks"
+            channel = if (project.version.toString().contains("SNAPSHOT")) "Beta" else "Release"
+            changelog.set(project.rootProject.file("CHANGELOG.md").readText())
+            platforms {
+                paper {
+                    jar.set(tasks.named("copyJar", dev.mizule.mizulebuildlogic.task.FileCopyTask::class).get().destination)
+                    platformVersions = listOf("1.21")
+                }
             }
         }
     }
