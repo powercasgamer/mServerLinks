@@ -72,7 +72,7 @@ public class mServerLinks extends JavaPlugin {
 
         Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
             checkUpdate();
-        }, 0, 1, TimeUnit.MINUTES);
+        }, 0, 1, TimeUnit.HOURS);
 
         for (final Map.Entry<String, Link> entry : this.config.links().entrySet()) {
             final String name = entry.getKey();
@@ -110,13 +110,19 @@ public class mServerLinks extends JavaPlugin {
     }
 
     private void checkUpdate() {
-        final int distance = UpdateUtil.fetchDistanceFromGitHub("powercas_gamer", "mServerLinks", Constants.GIT_COMMIT);
+        final int distance = UpdateUtil.fetchDistanceFromGitHub("powercasgamer/mServerLinks", Constants.GIT_BRANCH,
+            Constants.GIT_COMMIT);
+        if (distance == UpdateUtil.DISTANCE_ERROR) {
+            getLogger().warning("Failed to check for updates!");
+            return;
+         } else if (distance == UpdateUtil.DISTANCE_UNKNOWN) {
+            getLogger().warning("Failed to check for updates!");
+            return;
+        }
+
         if (distance > 0) {
             getLogger().info("A new version of mServerLinks is available! (Distance: " + distance + ")");
-            getLogger().info("Download it at: " + Constants.GIT_URL);
-        } else {
-            // test
-            getLogger().info("mServerLinks is up to date!");
+            getLogger().info("Download it at: " + Constants.GIT_URL + "/releases");
         }
     }
 }
