@@ -50,6 +50,10 @@ data class Config(
         "example" to Link("<red>Example", URI.create("https://example.com")),
         "bug" to Link("Report a Bug", URI.create("https://example.com"), ServerLinks.Type.REPORT_BUG),
     ),
+
+
+    val updateChecker: Boolean = true,
+    val bStats: Boolean = true,
 )
 
 @ConfigSerializable

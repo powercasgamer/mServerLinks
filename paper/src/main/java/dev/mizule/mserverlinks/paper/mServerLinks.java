@@ -64,16 +64,24 @@ public class mServerLinks extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("mServerLinks has been enabled!");
-        if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
-            final Metrics metrics = new Metrics(this, 22368);
-        } else {
-            getSLF4JLogger().warn("You are running a development build of mServerLinks, metrics are disabled!");
+        if (this.config.bStats()) {
+            if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
+                final Metrics metrics = new Metrics(this, 22368);
+            } else {
+                getSLF4JLogger().warn("You are running a development build of mServerLinks, metrics are disabled!");
+            }
         }
 
-        Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
-            checkUpdate();
-        }, 0, 1, TimeUnit.HOURS);
+        if (this.config.updateChecker()) {
+            Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
+                checkUpdate();
+            }, 0, 1, TimeUnit.HOURS);
+        }
 
+        registerLinks();
+    }
+
+    public void registerLinks() {
         for (final Map.Entry<String, Link> entry : this.config.links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
@@ -111,11 +119,12 @@ public class mServerLinks extends JavaPlugin {
 
     private void checkUpdate() {
         final int distance = UpdateUtil.fetchDistanceFromGitHub("powercasgamer/mServerLinks", Constants.GIT_BRANCH,
-            Constants.GIT_COMMIT);
+            Constants.GIT_COMMIT
+        );
         if (distance == UpdateUtil.DISTANCE_ERROR) {
             getLogger().warning("Failed to check for updates!");
             return;
-         } else if (distance == UpdateUtil.DISTANCE_UNKNOWN) {
+        } else if (distance == UpdateUtil.DISTANCE_UNKNOWN) {
             getLogger().warning("Failed to check for updates!");
             return;
         }
