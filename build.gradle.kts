@@ -22,6 +22,11 @@ subprojects {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://maven.mizule.dev/")
+        maven("https://jitpack.io") {
+            mavenContent {
+                includeGroup("net.william278")
+            }
+        }
     }
 
     configureIndraJavaVersion(21)

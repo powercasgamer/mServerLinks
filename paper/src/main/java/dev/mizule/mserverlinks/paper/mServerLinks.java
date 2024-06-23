@@ -28,14 +28,20 @@ import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigManager;
 import dev.mizule.mserverlinks.paper.config.Config;
 import dev.mizule.mserverlinks.paper.config.Link;
+import dev.mizule.mserverlinks.paper.util.UpdateUtil;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.william278.desertwell.about.AboutMenu;
+import net.william278.desertwell.util.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class mServerLinks extends JavaPlugin {
 
@@ -64,6 +70,10 @@ public class mServerLinks extends JavaPlugin {
             getSLF4JLogger().warn("You are running a development build of mServerLinks, metrics are disabled!");
         }
 
+        Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
+            checkUpdate();
+        }, 0, 1, TimeUnit.MINUTES);
+
         for (final Map.Entry<String, Link> entry : this.config.links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
@@ -81,5 +91,32 @@ public class mServerLinks extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("mServerLinks has been disabled!");
+    }
+
+    private void showAboutMenu(final CommandSender sender) {
+        final AboutMenu menu = AboutMenu.builder()
+            .title(Component.text(Constants.NAME))
+            .description(Component.text(Constants.DESCRIPTION))
+            .version(Version.fromString(Constants.VERSION))
+            .credits(
+                "Author",
+                AboutMenu.Credit.of("powercas_gamer").description("Click to visit github").url("https://github" +
+                    ".com/powercasgamer")
+            )
+            .buttons(
+                AboutMenu.Link.of(Constants.GIT_URL).text("GitHub").icon("⛏")
+            )
+            .build();
+    }
+
+    private void checkUpdate() {
+        final int distance = UpdateUtil.fetchDistanceFromGitHub("powercas_gamer", "mServerLinks", Constants.GIT_COMMIT);
+        if (distance > 0) {
+            getLogger().info("A new version of mServerLinks is available! (Distance: " + distance + ")");
+            getLogger().info("Download it at: " + Constants.GIT_URL);
+        } else {
+            // test
+            getLogger().info("mServerLinks is up to date!");
+        }
     }
 }

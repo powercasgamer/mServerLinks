@@ -16,6 +16,9 @@ dependencies {
     runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.0.2")
+    implementation(libs.desertwell) {
+        exclude("org.json")
+    }
 }
 
 mizule {

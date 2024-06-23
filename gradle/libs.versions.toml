@@ -3,9 +3,10 @@
 mizule = "0.0.1-v193-SNAPSHOT"
 minecraft = "1.21"
 hangar-publish = "0.1.2"
+desertwell = "2.0.4"
 
 [libraries]
-
+desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version = "0.1.2" }
