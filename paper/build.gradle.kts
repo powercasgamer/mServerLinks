@@ -38,7 +38,7 @@ hangarPublish {
     publications.register("plugin") {
         version = project.version as String
         id = "mServerLinks"
-        channel = if (project.version.toString().contains("SNAPSHOT")) "Snapshot" else "Release"
+        channel = if (project.version.toString().contains("SNAPSHOT")) "Beta" else "Release"
         changelog.set(project.rootProject.file("CHANGELOG.md").readText())
         platforms {
             paper {
