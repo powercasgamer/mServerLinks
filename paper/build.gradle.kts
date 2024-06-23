@@ -11,10 +11,10 @@ plugins {
 dependencies {
     api(projects.mserverlinksCore)
     compileOnly(paper(libs.versions.minecraft.get() + "-R0.1-SNAPSHOT"))
-    runtimeDownloadApi(kotlin("stdlib-jdk8"))
-    runtimeDownloadApi(configurate("hocon", "4.2.0-SNAPSHOT"))
-    runtimeDownloadApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
-    runtimeDownloadApi("org.bstats:bstats-bukkit:3.0.2")
+    runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
+    runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
+    runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
+    runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.0.2")
 }
 
 mizule {
