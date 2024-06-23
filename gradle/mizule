@@ -1,0 +1,6 @@
+spotless=true
+gitignore=true
+gitattributes=true
+editorconfig=true
+github=true
+githubWorkflows=true

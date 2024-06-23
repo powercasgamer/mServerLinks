@@ -1,0 +1,6 @@
+name: mServerLinks
+version: 1.0.0
+api-version: 1.21
+main: dev.mizule.mserverlinks.paper.mServerLinks
+authors: [powercas_gamer]
+loader: dev.mizule.mserverlinks.libs.xyz.jpenilla.gremlin.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader

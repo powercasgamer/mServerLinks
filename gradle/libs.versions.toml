@@ -1,0 +1,19 @@
+[versions]
+# minecraft
+mizule = "0.0.1-v193-SNAPSHOT"
+minecraft = "1.21"
+
+[libraries]
+
+
+[plugins]
+mizule-root = { id = "dev.mizule.mizule-build-logic.root", version.ref = "mizule" }
+mizule-base = { id = "dev.mizule.mizule-build-logic", version.ref = "mizule" }
+mizule-kotlin = { id = "dev.mizule.mizule-build-logic.kotlin", version.ref = "mizule" }
+mizule-spotless = { id = "dev.mizule.mizule-build-logic.spotless", version.ref = "mizule" }
+mizule-spotless-root = { id = "dev.mizule.mizule-build-logic.spotless.root", version.ref = "mizule" }
+mizule-publishing = { id = "dev.mizule.mizule-build-logic.publishing", version.ref = "mizule" }
+mizule-blossom = { id = "dev.mizule.mizule-build-logic.blossom", version.ref = "mizule" }
+mizule-gremlin = { id = "dev.mizule.mizule-build-logic.gremlin", version.ref = "mizule" }
+mizule-platform-paper = { id = "dev.mizule.mizule-build-logic.platform.paper", version.ref = "mizule" }
+mizule-aggregate-javadoc = { id = "dev.mizule.mizule-build-logic.aggregate.javadoc", version.ref = "mizule" }
