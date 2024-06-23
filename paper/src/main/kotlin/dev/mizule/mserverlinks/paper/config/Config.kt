@@ -52,7 +52,6 @@ data class Config(
         "bug" to Link("Report a Bug", URI.create("https://example.com"), ServerLinks.Type.REPORT_BUG),
     ),
 
-
     val updateChecker: Boolean = true,
     @Setting(value = "bStats")
     val bStats: Boolean = true,
