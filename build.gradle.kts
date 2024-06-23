@@ -40,5 +40,4 @@ subprojects {
             this.kotlin = "1.9.24"
         }
     }
-
 }
