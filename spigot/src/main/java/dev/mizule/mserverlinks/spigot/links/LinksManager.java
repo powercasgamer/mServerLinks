@@ -22,44 +22,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.paper.listener;
+package dev.mizule.mserverlinks.spigot.links;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
-import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
+import dev.mizule.mserverlinks.spigot.mServerLinks;
+import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.ServerLinks;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLinksSendEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public class LinkListener implements Listener {
+public class LinksManager {
 
-    private final mServerLinksBootstrapper bootstrapper;
+    private final mServerLinks bootstrapper;
+    private final Logger logger = LoggerFactory.getLogger(LinksManager.class);
+    private final List<ServerLinks.ServerLink> links;
 
-    public LinkListener(final mServerLinksBootstrapper bootstrapper) {
+    public LinksManager(final mServerLinks bootstrapper) {
         this.bootstrapper = bootstrapper;
+        this.links = new ArrayList<>();
     }
 
-    @EventHandler
-    public void someEvent(final PlayerLinksSendEvent event) {
-        final Player player = event.getPlayer();
-        final ServerLinks serverLinks = event.getLinks();
-        for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().playerLinks().entrySet()) {
+    public void unregisterLinks() {
+        for (final ServerLinks.ServerLink link : links) {
+            logger.info("Unregistering link: {}", link.getDisplayName());
+            Bukkit.getServerLinks().removeLink(link);
+        }
+    }
+
+    public void registerLinks() {
+        for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
-            final String permission = link.permission();
             final ServerLinks.Type type = link.type();
-            if (link.permission() != null && player.hasPermission(permission)) {
-                if (type == null) {
-                    serverLinks.addLink(MiniMessage.miniMessage().deserialize(link.name()), link.uri());
-                } else {
-                    serverLinks.addLink(type, link.uri());
-                }
+
+            logger.info("Registering link: {}", name);
+
+            if (type == null) {
+                links.add(Bukkit
+                    .getServerLinks()
+                    .addLink(UpdateUtil.LEGACY_COMPONENT_SERIALIZER
+                        .serialize(MiniMessage.miniMessage().deserialize(link.name())), link.uri()));
+            } else {
+                links.add(Bukkit.getServerLinks().addLink(type, link.uri()));
             }
         }
-
     }
 }

@@ -19,6 +19,8 @@ rootProject.name = "mserverlinks-parent"
 
 sequenceOf(
     "core",
+    "bukkit",
+    "spigot",
     "paper",
 ).forEach {
     include("mserverlinks-$it")

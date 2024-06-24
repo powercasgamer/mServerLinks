@@ -1,6 +1,6 @@
 [versions]
 # minecraft
-mizule = "0.0.1-v196-SNAPSHOT"
+mizule = "0.0.1-v197-SNAPSHOT"
 minecraft = "1.21"
 hangar-publish = "0.1.2"
 desertwell = "2.0.4"

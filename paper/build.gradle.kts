@@ -14,7 +14,7 @@ plugins {
 }
 
 dependencies {
-    api(projects.mserverlinksCore)
+    api(projects.mserverlinksBukkit)
     compileOnly(paper(libs.versions.minecraft.get()))
     runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
     runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))

@@ -26,9 +26,12 @@ package dev.mizule.mserverlinks.core.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
@@ -56,14 +59,14 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class ConfigurationContainer<C> {
     private final AtomicReference<C> config;
-    private final HoconConfigurationLoader loader;
+    private final ConfigurationLoader<? extends ConfigurationNode> loader;
     private final Class<C> clazz;
     private final Logger logger;
 
     private ConfigurationContainer(
         final C config,
         final Class<C> clazz,
-        final HoconConfigurationLoader loader,
+        final ConfigurationLoader<? extends ConfigurationNode> loader,
         final Logger logger
     ) {
         this.config = new AtomicReference<>(config);
@@ -75,7 +78,7 @@ public final class ConfigurationContainer<C> {
     public CompletableFuture<Boolean> reload() {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                final CommentedConfigurationNode node = loader.load();
+                final ConfigurationNode node = loader.load();
                 C newConfig = node.get(clazz);
                 node.set(clazz, newConfig);
                 loader.save(node);
@@ -112,7 +115,38 @@ public final class ConfigurationContainer<C> {
             .build();
 
         try {
-            final CommentedConfigurationNode node = loader.load();
+            final ConfigurationNode node = loader.load();
+            final C config = node.get(clazz);
+            node.set(clazz, config);
+            loader.save(node);
+            return new ConfigurationContainer<>(config, clazz, loader, logger);
+        } catch (ConfigurateException exception){
+            logger.error("Could not load {} configuration file", clazz.getSimpleName(), exception);
+            return null;
+        }
+    }
+
+    public static <C> ConfigurationContainer<C> loadYaml(
+        final Logger logger,
+        final Path path,
+        final Class<C> clazz
+    ) {
+        final YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+            .indent(2)
+            .nodeStyle(NodeStyle.BLOCK)
+            .defaultOptions(opts -> opts
+                .shouldCopyDefaults(true)
+                .header("mServerLinks | by powercas_gamer\n")
+                .serializers(builder -> {
+                    builder.registerAnnotatedObjects(org.spongepowered.configurate.kotlin.ObjectMappingKt.objectMapperFactory());
+                })
+            )
+
+            .path(path)
+            .build();
+
+        try {
+            final ConfigurationNode node = loader.load();
             final C config = node.get(clazz);
             node.set(clazz, config);
             loader.save(node);
