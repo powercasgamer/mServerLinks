@@ -24,7 +24,6 @@ gh release create "$version" --latest --verify-tag --generate-notes --title "$ve
 ./gradlew publishMods # Modrinth
 ./gradlew publishAllPublicationsToHangar syncAllPagesToHangar # Hangar
 
-
 # Increment the version and add the "-SNAPSHOT" suffix to gradle.properties
 new_version=$(echo "$version" | awk -F. '{$NF++;print}' | sed 's/ /./g')-SNAPSHOT
 sed -i 's/^\(version=\).*$/\1'"$new_version"'/' gradle.properties
