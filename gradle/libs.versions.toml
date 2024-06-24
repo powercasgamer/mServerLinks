@@ -23,4 +23,5 @@ mizule-publishing = { id = "dev.mizule.mizule-build-logic.publishing", version.r
 mizule-blossom = { id = "dev.mizule.mizule-build-logic.blossom", version.ref = "mizule" }
 mizule-gremlin = { id = "dev.mizule.mizule-build-logic.gremlin", version.ref = "mizule" }
 mizule-platform-paper = { id = "dev.mizule.mizule-build-logic.platform.paper", version.ref = "mizule" }
+mizule-platform-spigot = { id = "dev.mizule.mizule-build-logic.platform.spigot", version.ref = "mizule" }
 mizule-aggregate-javadoc = { id = "dev.mizule.mizule-build-logic.aggregate.javadoc", version.ref = "mizule" }
