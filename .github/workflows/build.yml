@@ -50,6 +50,17 @@ jobs:
           build-scan-publish: true
           build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-service-agree: "yes"
+       # gradle-build-action doesn't support caching files in the project dir
+      - name: "cache project local caches"
+        uses: actions/cache@v4
+        with:
+            path: |
+                .gradle/caches/VanillaGradle
+                .gradle/loom-cache
+                paper/.gradle/caches/paperweight
+            key: ${{ runner.os }}-project-local-gradle-caches-${{ hashFiles('**/libs.versions.toml', '**/*.gradle*', '**/gradle-wrapper.properties') }}
+            restore-keys: |
+                ${{ runner.os }}-project-local-gradle-caches-
 
       - name: Build with Gradle
         run: ./gradlew build --scan
@@ -79,3 +90,8 @@ jobs:
 #        env:
 #            ORG_GRADLE_PROJECT_mizuleUsername: ${{ secrets.MAVEN_USERNAME }}
 #            ORG_GRADLE_PROJECT_mizulePassword: ${{ secrets.MAVEN_PASSWORD }}
+      - name: "upload artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+            name: artifacts
+            path: "jars/*.jar"
