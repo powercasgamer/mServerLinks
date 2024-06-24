@@ -35,6 +35,7 @@ import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.ServerLinks;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -77,7 +78,7 @@ public class mServerLinks extends JavaPlugin {
             getSLF4JLogger().info("UpdateChecker has been enabled, to disable it set 'update-checker' to false in the config!");
             Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
                 checkUpdate();
-            }, 0, 1, TimeUnit.HOURS);
+            }, 0, 3, TimeUnit.HOURS);
         }
 
         registerLinks();
@@ -87,13 +88,14 @@ public class mServerLinks extends JavaPlugin {
         for (final Map.Entry<String, Link> entry : this.config.links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
+            final ServerLinks.Type type = link.type();
 
             getLogger().info("Registering link: " + name);
 
-            if (link.type() == null) {
+            if (type == null) {
                 Bukkit.getServerLinks().addLink(MiniMessage.miniMessage().deserialize(link.name()), link.uri());
             } else {
-                Bukkit.getServerLinks().addLink(link.type(), link.uri());
+                Bukkit.getServerLinks().addLink(type, link.uri());
             }
         }
     }
