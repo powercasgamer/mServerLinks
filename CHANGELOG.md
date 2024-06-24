@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 - Reload command (Note: This will not work for online players, they will need to rejoin the server)
 - Per player links, this will allow you to set a link for a specific player (Note: horrible hack)
 
+### Changed
+- Temporarily disabled the update checker
+
 ## [2024-06-24] # 0.0.4
 
 ### Added

@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import dev.mizule.mizulebuildlogic.util.cloud
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.paper
+import dev.mizule.mizulebuildlogic.util.versionString
 import me.modmuss50.mpp.ReleaseType
 
 plugins {
@@ -90,6 +91,13 @@ afterEvaluate {
             accessToken = providers.environmentVariable("MODRINTH_API_KEY")
             projectId = "5E2WANwL"
             minecraftVersions.add("1.21")
+        }
+
+        discord {
+            webhookUrl = providers.environmentVariable("MIZULE_DISCORD_WEBHOOK_UPDATES")
+            dryRunWebhookUrl = providers.environmentVariable("MIZULE_DISCORD_WEBHOOK_UPDATES")
+            username.set("Mizule Updates")
+            content = "# ${project.versionString()} of mServerLinks has been released!"
         }
     }
 }

@@ -60,11 +60,13 @@ public class mServerLinks extends JavaPlugin {
             }
         }
 
-        if (this.bootstrapper.config().get().updateChecker()) {
-            getSLF4JLogger().info("UpdateChecker has been enabled, to disable it set 'update-checker' to false in the config!");
-            Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
-                checkUpdate();
-            }, 0, 3, TimeUnit.HOURS);
+        if (false) {
+            if (this.bootstrapper.config().get().updateChecker()) {
+                getSLF4JLogger().info("UpdateChecker has been enabled, to disable it set 'update-checker' to false in the config!");
+                Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
+                    checkUpdate();
+                }, 0, 3, TimeUnit.HOURS);
+            }
         }
         Bukkit.getPluginManager().registerEvents(new LinkListener(this.bootstrapper), this);
 
