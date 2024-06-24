@@ -5,7 +5,7 @@ import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.spigot
 
 plugins {
-//    id(libs.plugins.mizule.platform.paper.get().pluginId)
+    id(libs.plugins.mizule.platform.spigot.get().pluginId)
     id(libs.plugins.mizule.kotlin.get().pluginId)
     id(libs.plugins.mizule.gremlin.get().pluginId)
 }
