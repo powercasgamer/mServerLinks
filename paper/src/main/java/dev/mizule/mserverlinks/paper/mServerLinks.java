@@ -25,47 +25,34 @@
 package dev.mizule.mserverlinks.paper;
 
 import dev.mizule.mserverlinks.core.Constants;
-import dev.mizule.mserverlinks.core.config.ConfigManager;
-import dev.mizule.mserverlinks.paper.config.Config;
-import dev.mizule.mserverlinks.paper.config.Link;
 import dev.mizule.mserverlinks.paper.util.UpdateUtil;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.william278.desertwell.about.AboutMenu;
-import net.william278.desertwell.util.Version;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.ServerLinks;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.incendo.cloud.paper.PaperCommandManager;
 
-import java.nio.file.Path;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class mServerLinks extends JavaPlugin {
 
-    private Config config;
+    private final PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager;
+    private final mServerLinksBootstrapper bootstrapper;
 
-    @Override
-    public void onLoad() {
-        final Path dataFolder = getDataFolder().toPath();
-        this.config = ConfigManager.loadConfig(
-            dataFolder.resolve("config.conf"),
-            HoconConfigurationLoader.builder()
-                .path(dataFolder.resolve("config.conf"))
-                .indent(2)
-                .prettyPrinting(true)
-                .build(),
-            Config.class
-        );
+    public mServerLinks(
+        final PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager,
+        mServerLinksBootstrapper bootstrapper
+    ) {
+        this.commandManager = commandManager;
+        this.bootstrapper = bootstrapper;
     }
+
 
     @Override
     public void onEnable() {
+        this.commandManager.onEnable();
         getLogger().info("mServerLinks has been enabled!");
-        if (this.config.bStats()) {
+        if (this.bootstrapper.config().get().bStats()) {
             getSLF4JLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
             if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
                 final Metrics metrics = new Metrics(this, 22368);
@@ -74,51 +61,19 @@ public class mServerLinks extends JavaPlugin {
             }
         }
 
-        if (this.config.updateChecker()) {
+        if (this.bootstrapper.config().get().updateChecker()) {
             getSLF4JLogger().info("UpdateChecker has been enabled, to disable it set 'update-checker' to false in the config!");
             Bukkit.getAsyncScheduler().runAtFixedRate(this, (task) -> {
                 checkUpdate();
             }, 0, 3, TimeUnit.HOURS);
         }
 
-        registerLinks();
-    }
-
-    public void registerLinks() {
-        for (final Map.Entry<String, Link> entry : this.config.links().entrySet()) {
-            final String name = entry.getKey();
-            final Link link = entry.getValue();
-            final ServerLinks.Type type = link.type();
-
-            getLogger().info("Registering link: " + name);
-
-            if (type == null) {
-                Bukkit.getServerLinks().addLink(MiniMessage.miniMessage().deserialize(link.name()), link.uri());
-            } else {
-                Bukkit.getServerLinks().addLink(type, link.uri());
-            }
-        }
+        this.bootstrapper.linksManager().registerLinks();
     }
 
     @Override
     public void onDisable() {
         getLogger().info("mServerLinks has been disabled!");
-    }
-
-    private void showAboutMenu(final CommandSender sender) {
-        final AboutMenu menu = AboutMenu.builder()
-            .title(Component.text(Constants.NAME))
-            .description(Component.text(Constants.DESCRIPTION))
-            .version(Version.fromString(Constants.VERSION))
-            .credits(
-                "Author",
-                AboutMenu.Credit.of("powercas_gamer").description("Click to visit github").url("https://github" +
-                    ".com/powercasgamer")
-            )
-            .buttons(
-                AboutMenu.Link.of(Constants.GIT_URL).text("GitHub").icon("⛏")
-            )
-            .build();
     }
 
     private void checkUpdate() {

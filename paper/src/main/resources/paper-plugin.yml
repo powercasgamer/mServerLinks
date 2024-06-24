@@ -4,3 +4,4 @@ api-version: "1.21"
 main: dev.mizule.mserverlinks.paper.mServerLinks
 authors: [${pluginAuthor}]
 loader: dev.mizule.mserverlinks.libs.xyz.jpenilla.gremlin.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader
+bootstrapper: dev.mizule.mserverlinks.paper.mServerLinksBootstrapper

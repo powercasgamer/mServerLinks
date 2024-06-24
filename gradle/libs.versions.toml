@@ -1,13 +1,15 @@
 [versions]
 # minecraft
-mizule = "0.0.1-v193-SNAPSHOT"
+mizule = "0.0.1-v194-SNAPSHOT"
 minecraft = "1.21"
 hangar-publish = "0.1.2"
 desertwell = "2.0.4"
 mod-publish = "0.5.1"
+slf4j = "2.0.13"
 
 [libraries]
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish" }

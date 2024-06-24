@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import dev.mizule.mizulebuildlogic.util.cloud
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.paper
 import me.modmuss50.mpp.ReleaseType
@@ -13,10 +14,11 @@ plugins {
 
 dependencies {
     api(projects.mserverlinksCore)
-    compileOnly(paper(libs.versions.minecraft.get() + "-R0.1-SNAPSHOT"))
+    compileOnly(paper(libs.versions.minecraft.get()))
     runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
     runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
+    runtimeDownloadOnlyApi(cloud("paper", "2.0.0-beta.8"))
     runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.0.2")
     implementation(libs.desertwell) {
         exclude("org.json")
@@ -24,9 +26,21 @@ dependencies {
 }
 
 mizule {
-    shadowOptions.enableShadow.set(true)
     archiveFileName = "mServerLinks-Paper-{version}.jar"
     enableCopyTask = true
+
+    shadowOptions {
+        enableShadow.set(true)
+        relocations.set(
+            listOf(
+                "org.bstats",
+                "org.spongepowered.configurate",
+                "org.incendo",
+                "net.william278.desertwell",
+                "io.leangen.geantyref"
+            )
+        )
+    }
 
     versions {
         kotlin.set("1.9.24")
