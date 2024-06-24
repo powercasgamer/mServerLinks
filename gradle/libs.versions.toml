@@ -1,6 +1,6 @@
 [versions]
 # minecraft
-mizule = "0.0.1-v196-SNAPSHOT"
+mizule = "0.0.1-v198-SNAPSHOT"
 minecraft = "1.21"
 hangar-publish = "0.1.2"
 desertwell = "2.0.4"
@@ -23,4 +23,5 @@ mizule-publishing = { id = "dev.mizule.mizule-build-logic.publishing", version.r
 mizule-blossom = { id = "dev.mizule.mizule-build-logic.blossom", version.ref = "mizule" }
 mizule-gremlin = { id = "dev.mizule.mizule-build-logic.gremlin", version.ref = "mizule" }
 mizule-platform-paper = { id = "dev.mizule.mizule-build-logic.platform.paper", version.ref = "mizule" }
+mizule-platform-spigot = { id = "dev.mizule.mizule-build-logic.platform.spigot", version.ref = "mizule" }
 mizule-aggregate-javadoc = { id = "dev.mizule.mizule-build-logic.aggregate.javadoc", version.ref = "mizule" }

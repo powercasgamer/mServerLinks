@@ -1,0 +1,9 @@
+name: ${pluginName}
+version: ${pluginVersion}
+api-version: "1.21"
+main: dev.mizule.mserverlinks.spigot.mServerLinks
+authors: [ ${pluginAuthor} ]
+
+libraries:
+    - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24
+    - org.jetbrains.kotlin:kotlin-reflect:1.9.24

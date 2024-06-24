@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.mizule.publishing) apply false
     alias(libs.plugins.mizule.spotless) apply false
     alias(libs.plugins.mizule.platform.paper) apply false
+    alias(libs.plugins.mizule.platform.spigot) apply false
     alias(libs.plugins.mizule.kotlin) apply false
     alias(libs.plugins.mizule.gremlin) apply false
     alias(libs.plugins.mizule.blossom) apply false

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.paper.config
+package dev.mizule.mserverlinks.bukkit.config
 
 import org.bukkit.ServerLinks
 import org.spongepowered.configurate.objectmapping.ConfigSerializable

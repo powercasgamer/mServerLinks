@@ -22,10 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.paper.listener;
+package dev.mizule.mserverlinks.spigot.listener;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
-import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
+import dev.mizule.mserverlinks.spigot.mServerLinks;
+import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ServerLinks;
 import org.bukkit.entity.Player;
@@ -37,9 +38,9 @@ import java.util.Map;
 
 public class LinkListener implements Listener {
 
-    private final mServerLinksBootstrapper bootstrapper;
+    private final mServerLinks bootstrapper;
 
-    public LinkListener(final mServerLinksBootstrapper bootstrapper) {
+    public LinkListener(final mServerLinks bootstrapper) {
         this.bootstrapper = bootstrapper;
     }
 
@@ -54,12 +55,11 @@ public class LinkListener implements Listener {
             final ServerLinks.Type type = link.type();
             if (link.permission() != null && player.hasPermission(permission)) {
                 if (type == null) {
-                    serverLinks.addLink(MiniMessage.miniMessage().deserialize(link.name()), link.uri());
+                    serverLinks.addLink(UpdateUtil.LEGACY_COMPONENT_SERIALIZER.serialize(MiniMessage.miniMessage().deserialize(link.name())), link.uri());
                 } else {
                     serverLinks.addLink(type, link.uri());
                 }
             }
         }
-
     }
 }
