@@ -40,13 +40,11 @@ public class mServerLinks extends JavaPlugin {
     private final mServerLinksBootstrapper bootstrapper;
 
     public mServerLinks(
-        final PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager,
         mServerLinksBootstrapper bootstrapper
     ) {
-        this.commandManager = commandManager;
         this.bootstrapper = bootstrapper;
+        this.commandManager = bootstrapper.commandManager();
     }
-
 
     @Override
     public void onEnable() {

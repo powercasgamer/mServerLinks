@@ -27,6 +27,7 @@ package dev.mizule.mserverlinks.paper.links;
 import dev.mizule.mserverlinks.paper.config.Link;
 import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ServerLinks;
 import org.slf4j.Logger;
@@ -49,8 +50,8 @@ public class LinksManager {
 
     public void unregisterLinks() {
         for (final ServerLinks.ServerLink link : links) {
-            logger.info("Unregistering link: {}", link.getDisplayName());
-            logger.info("Remove link? {}", Bukkit.getServerLinks().removeLink(link));
+            logger.info("Unregistering link: {}", PlainTextComponentSerializer.plainText().serialize(link.displayName()));
+            Bukkit.getServerLinks().removeLink(link);
         }
     }
 

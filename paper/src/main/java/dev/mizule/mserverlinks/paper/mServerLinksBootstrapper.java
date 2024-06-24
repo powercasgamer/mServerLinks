@@ -74,6 +74,7 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
                 this.config.reload().thenAccept(success -> {
                     if (success) {
                         ctx.sender().getSender().sendRichMessage("Config reloaded!");
+                        ctx.sender().getSender().sendRichMessage("<i>Note: You need to relog for changes to take effect.");
                     } else {
                         ctx.sender().getSender().sendRichMessage("Config not reloaded :(");
                     }
@@ -125,6 +126,6 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
 
     @Override
     public JavaPlugin createPlugin(final PluginProviderContext context) {
-        return new mServerLinks(this.commandManager, this);
+        return new mServerLinks(this);
     }
 }

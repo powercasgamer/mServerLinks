@@ -111,7 +111,6 @@ public final class ConfigurationContainer<C> {
             .path(path)
             .build();
 
-
         try {
             final CommentedConfigurationNode node = loader.load();
             final C config = node.get(clazz);
