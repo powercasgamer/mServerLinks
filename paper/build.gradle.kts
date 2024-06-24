@@ -1,12 +1,14 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.paper
+import me.modmuss50.mpp.ReleaseType
 
 plugins {
     id(libs.plugins.mizule.platform.paper.get().pluginId)
     id(libs.plugins.mizule.kotlin.get().pluginId)
     id(libs.plugins.mizule.gremlin.get().pluginId)
     alias(libs.plugins.hangar.publish)
+    alias(libs.plugins.mod.publish)
 }
 
 dependencies {
@@ -61,6 +63,18 @@ afterEvaluate {
                     platformVersions = listOf("1.21")
                 }
             }
+        }
+    }
+
+    publishMods {
+        changelog.set(project.rootProject.file("CHANGELOG.md").readText())
+        file.set(tasks.named("copyJar", dev.mizule.mizulebuildlogic.task.FileCopyTask::class).get().destination)
+        type = if (project.version.toString().contains("SNAPSHOT")) ReleaseType.BETA else ReleaseType.STABLE
+        modLoaders.add("paper")
+
+        modrinth {
+            projectId = "5E2WANwL"
+            minecraftVersions.add("1.21")
         }
     }
 }
