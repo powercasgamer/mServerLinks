@@ -52,6 +52,14 @@ data class Config(
         "bug" to Link("Report a Bug", URI.create("https://example.com"), ServerLinks.Type.REPORT_BUG),
     ),
 
+    @Comment(
+        "Links that are only visible to players with the specified permission\nThis currently works but is not recommended" +
+            " to use due to Spigot's implementation of the event."
+    )
+    val playerLinks: Map<String, Link> = mapOf(
+        "staff-guide" to Link("Staff Guide", URI.create("https://example.com"), permission = "mserverlinks.staff"),
+    ),
+
     val updateChecker: Boolean = true,
     @Setting(value = "bStats")
     val bStats: Boolean = true,
@@ -62,5 +70,6 @@ data class Config(
 data class Link(
     val name: String,
     val uri: URI,
-    val type: ServerLinks.Type? = null
+    val type: ServerLinks.Type? = null,
+    val permission: String? = null,
 )

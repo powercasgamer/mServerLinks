@@ -25,6 +25,7 @@
 package dev.mizule.mserverlinks.paper;
 
 import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.paper.listener.LinkListener;
 import dev.mizule.mserverlinks.paper.util.UpdateUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bstats.bukkit.Metrics;
@@ -65,6 +66,7 @@ public class mServerLinks extends JavaPlugin {
                 checkUpdate();
             }, 0, 3, TimeUnit.HOURS);
         }
+        Bukkit.getPluginManager().registerEvents(new LinkListener(this.bootstrapper), this);
 
         this.bootstrapper.linksManager().registerLinks();
     }
