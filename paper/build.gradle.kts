@@ -73,6 +73,7 @@ afterEvaluate {
         modLoaders.add("paper")
 
         modrinth {
+            accessToken = providers.environmentVariable("MODRINTH_API_KEY")
             projectId = "5E2WANwL"
             minecraftVersions.add("1.21")
         }
