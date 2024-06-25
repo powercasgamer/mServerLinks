@@ -25,9 +25,9 @@
 package dev.mizule.mserverlinks.spigot;
 
 import dev.mizule.mserverlinks.bukkit.config.Config;
+import dev.mizule.mserverlinks.bukkit.util.VersionUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
-import dev.mizule.mserverlinks.core.util.ClassUtil;
 import dev.mizule.mserverlinks.spigot.links.LinksManager;
 import dev.mizule.mserverlinks.spigot.listener.LinkListener;
 import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
@@ -56,7 +56,12 @@ public class mServerLinks extends JavaPlugin {
         this.config = ConfigurationContainer.loadYaml(LOGGER, this.getDataFolder().toPath().resolve("config.yml"), Config.class);
         this.linksManager = new LinksManager(this);
 
-        if (ClassUtil.exists("io.papermc.paper.event.server.ServerExceptionEvent")) {
+        if (VersionUtil.isFolia()) {
+            getLogger().info("It appears you're using Folia, this platform has not been thoroughly tested with mServerLinks. " +
+                "Proceed with caution!");
+        }
+
+        if (VersionUtil.isPaper()) {
             getLogger().info("It appears you're using Paper, please download the Paper jar from " + Constants.GIT_URL +
                 "/releases/latest");
         }
