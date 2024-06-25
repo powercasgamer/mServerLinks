@@ -25,6 +25,7 @@
 package dev.mizule.mserverlinks.paper;
 
 import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.paper.listener.LinkListener;
 import dev.mizule.mserverlinks.paper.util.UpdateUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -53,7 +54,7 @@ public class mServerLinks extends JavaPlugin {
         getLogger().info("mServerLinks has been enabled!");
         if (this.bootstrapper.config().get().bStats()) {
             getSLF4JLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
+            if (!VersionUtil.isDev()) {
                 final Metrics metrics = new Metrics(this, 22368);
             } else {
                 getSLF4JLogger().warn("You are running a development build of mServerLinks, metrics are disabled!");

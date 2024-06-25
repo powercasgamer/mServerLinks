@@ -25,11 +25,13 @@
 package dev.mizule.mserverlinks.velocity.listener;
 
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.configuration.PlayerEnterConfigurationEvent;
+import com.velocitypowered.api.network.ProtocolState;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.util.ServerLink;
 import dev.mizule.mserverlinks.velocity.links.LinksManager;
-import dev.mizule.mserverlinks.velocity.mServerLinks;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,28 +40,36 @@ import java.util.Map;
 public class LinkListener {
 
     private final LinksManager linksManager;
-    private final mServerLinks plugin;
 
-    public LinkListener(LinksManager linksManager, final mServerLinks plugin) {
+    private final ComponentLogger logger = ComponentLogger.logger();
+
+    public LinkListener(final LinksManager linksManager) {
         this.linksManager = linksManager;
-        this.plugin = plugin;
     }
 
     @Subscribe
-    public void configurationPhase(final PlayerEnterConfigurationEvent event) {
-        final Player player = event.player();
+    public void onPostLogin(final PostLoginEvent event) {
+        final Player player = event.getPlayer();
+        logger.debug("[PLE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
+        final ProtocolState protocolState = player.getProtocolState();
+        if (protocolState != ProtocolState.CONFIGURATION && protocolState != ProtocolState.PLAY) return;
         final List<ServerLink> serverLinks = this.linksManager.links();
         final Map<String, ServerLink> playerLinks = this.linksManager.playerLinks();
 
-        final List<ServerLink> allLinks = new ArrayList<>(serverLinks.size() + playerLinks.size());
+        final List<ServerLink> allLinks = new ArrayList<>(serverLinks);
 
         for (final Map.Entry<String, ServerLink> entry : playerLinks.entrySet()) {
             if (player.hasPermission(entry.getKey())) {
                 allLinks.add(entry.getValue());
             }
         }
-
         player.setServerLinks(allLinks);
+    }
+
+    @Subscribe
+    public void confi(final PlayerEnterConfigurationEvent event) {
+        final Player player = event.player();
+        logger.debug("[PECE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
     }
 
 }

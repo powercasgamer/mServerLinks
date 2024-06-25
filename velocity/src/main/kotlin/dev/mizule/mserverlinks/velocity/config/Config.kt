@@ -35,7 +35,7 @@ data class Config(
 
     @Comment(
         """Possible values Type:
- - REPORT_BUG
+ - BUG_REPORT
  - COMMUNITY_GUIDELINES
  - SUPPORT
  - STATUS

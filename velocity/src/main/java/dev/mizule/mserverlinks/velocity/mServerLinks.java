@@ -25,6 +25,7 @@
 package dev.mizule.mserverlinks.velocity;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -34,6 +35,8 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
+import dev.mizule.mserverlinks.core.util.VersionUtil;
+import dev.mizule.mserverlinks.velocity.commands.Commands;
 import dev.mizule.mserverlinks.velocity.config.Config;
 import dev.mizule.mserverlinks.velocity.links.LinksManager;
 import dev.mizule.mserverlinks.velocity.listener.LinkListener;
@@ -63,22 +66,35 @@ public class mServerLinks {
     private ConfigurationContainer<Config> config;
     private LinksManager linksManager;
     private final Metrics.Factory metricsFactory;
+    private final Injector injector;
 
     @Inject
     public mServerLinks(ProxyServer proxy, ComponentLogger logger, final @DataDirectory Path datDirectory,
-                        final PluginManager pluginManager, final EventManager eventManager, final Metrics.Factory metricsFactory) {
+                        final PluginManager pluginManager, final EventManager eventManager,
+                        final Metrics.Factory metricsFactory, final Injector injector
+                        ) {
         this.proxy = proxy;
         this.logger = logger;
         this.dataDirectory = datDirectory;
         this.eventManager = eventManager;
         this.pluginManager = pluginManager;
         this.metricsFactory = metricsFactory;
-
+        this.injector = injector;
     }
 
     @Subscribe
     public void onProxyInitialization(final ProxyInitializeEvent event) {
         dependencies();
+        logger.warn("""
+
+            =======================================================================================================
+
+            This plugin will not work properly if you have it installed on both your backend and the proxy.
+            Please only install it on your proxy OR your backend, not both.
+            If you run into any issues with both installed, you will not receive support.
+
+            =======================================================================================================
+            """);
 
         this.config = ConfigurationContainer.load(
             logger,
@@ -86,17 +102,20 @@ public class mServerLinks {
             Config.class
         );
         this.linksManager = new LinksManager(this);
+        this.linksManager.registerLinks();
 
         if (this.config().get().bStats()) {
             logger.info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            if (!Constants.VERSION.contains("-SNAPSHOT")) {
+            if (!VersionUtil.isDev()) {
                 final Metrics metrics = this.metricsFactory.make(this, 22401);
             } else {
                 logger.warn("You are running a development build of mServerLinks, metrics are disabled!");
             }
         }
 
-        this.eventManager.register(this, new LinkListener(this.linksManager, this));
+        new Commands(this);
+
+        this.eventManager.register(this, new LinkListener(this.linksManager));
     }
 
     private void dependencies() {
@@ -122,5 +141,21 @@ public class mServerLinks {
 
     public ProxyServer proxy() {
         return proxy;
+    }
+
+    public Injector injector() {
+        return injector;
+    }
+
+    public LinksManager linksManager() {
+        return linksManager;
+    }
+
+    public EventManager eventManager() {
+        return eventManager;
+    }
+
+    public PluginManager pluginManager() {
+        return pluginManager;
     }
 }

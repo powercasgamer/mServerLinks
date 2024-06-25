@@ -30,7 +30,6 @@ import dev.mizule.mserverlinks.velocity.mServerLinks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,10 +54,7 @@ public class LinksManager {
         for (final ServerLink link : links) {
             logger.info(
                 "Unregistering link: {}",
-                PlainTextComponentSerializer
-                    .plainText()
-                    .serialize(link.getCustomLabel().orElse(Component.text(link.getBuiltInType().orElseThrow().name())))
-            );
+                    link.getCustomLabel().orElse(Component.text(link.getBuiltInType().orElseThrow().name())));
         }
     }
 

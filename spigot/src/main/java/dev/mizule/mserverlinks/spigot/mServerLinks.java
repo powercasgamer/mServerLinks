@@ -25,9 +25,9 @@
 package dev.mizule.mserverlinks.spigot;
 
 import dev.mizule.mserverlinks.bukkit.config.Config;
-import dev.mizule.mserverlinks.bukkit.util.VersionUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
+import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.spigot.links.LinksManager;
 import dev.mizule.mserverlinks.spigot.listener.LinkListener;
 import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
@@ -42,7 +42,6 @@ import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.incendo.cloud.permission.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 public class mServerLinks extends JavaPlugin {
 
@@ -73,7 +72,7 @@ public class mServerLinks extends JavaPlugin {
         getLogger().info("mServerLinks has been enabled!");
         if (this.config.get().bStats()) {
             getLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            if (!Constants.VERSION.endsWith("-SNAPSHOT")) {
+            if (!VersionUtil.isDev()) {
                 final Metrics metrics = new Metrics(this, 22368);
             } else {
                 getLogger().warning("You are running a development build of mServerLinks, metrics are disabled!");
