@@ -27,6 +27,7 @@ package dev.mizule.mserverlinks.spigot;
 import dev.mizule.mserverlinks.bukkit.config.Config;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
+import dev.mizule.mserverlinks.core.util.ClassUtil;
 import dev.mizule.mserverlinks.spigot.links.LinksManager;
 import dev.mizule.mserverlinks.spigot.listener.LinkListener;
 import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
@@ -54,6 +55,11 @@ public class mServerLinks extends JavaPlugin {
     public void onLoad() {
         this.config = ConfigurationContainer.loadYaml(LOGGER, this.getDataFolder().toPath().resolve("config.yml"), Config.class);
         this.linksManager = new LinksManager(this);
+
+        if (ClassUtil.exists("io.papermc.paper.event.server.ServerExceptionEvent")) {
+            getLogger().info("It appears you're using Paper, please download the Paper jar from " + Constants.GIT_URL +
+                "/releases/latest");
+        }
     }
 
     @Override
