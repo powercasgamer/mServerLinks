@@ -21,6 +21,7 @@ dependencies {
     runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi(cloud("paper", "2.0.0-beta.8"))
     runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.0.2")
+    implementation(libs.papertrail)
     implementation(libs.desertwell) {
         exclude("org.json")
     }
@@ -38,7 +39,8 @@ mizule {
                 "org.spongepowered.configurate",
                 "org.incendo",
                 "net.william278.desertwell",
-                "io.leangen.geantyref"
+                "io.leangen.geantyref",
+                "io.papermc.papertrail",
             )
         )
     }

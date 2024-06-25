@@ -1,0 +1,5 @@
+name: ${pluginName}
+version: ${pluginVersion}
+api-version: "1.21"
+authors: [${pluginAuthor}]
+main: dev.mizule.mserverlinks.libs.io.papermc.papertrail.RequiresPaperPlugins
