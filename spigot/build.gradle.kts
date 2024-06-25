@@ -35,7 +35,8 @@ mizule {
                 "org.bstats",
                 "org.spongepowered.configurate",
                 "org.incendo",
-                "io.leangen.geantyref"
+                "io.leangen.geantyref",
+                "net.kyori"
             )
         )
     }
