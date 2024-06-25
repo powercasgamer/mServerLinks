@@ -156,4 +156,49 @@ public final class ConfigurationContainer<C> {
             return null;
         }
     }
+
+    public static <C> ConfigurationContainer<C> migrateYamlToHocon(
+        final Logger logger,
+        final Path yamlPath,
+        final Path hoconPath,
+        final Class<C> clazz
+    ) {
+
+        final YamlConfigurationLoader oldFormat = YamlConfigurationLoader.builder()
+            .indent(2)
+            .nodeStyle(NodeStyle.BLOCK)
+            .defaultOptions(opts -> opts
+                .shouldCopyDefaults(true)
+                .header("mServerLinks | by powercas_gamer\n")
+                .serializers(builder -> {
+                    builder.registerAnnotatedObjects(org.spongepowered.configurate.kotlin.ObjectMappingKt.objectMapperFactory());
+                })
+            ).path(yamlPath)
+            .build();
+
+        final HoconConfigurationLoader newFormat = HoconConfigurationLoader.builder()
+            .indent(2)
+            .prettyPrinting(true)
+            .defaultOptions(opts -> opts
+                .shouldCopyDefaults(true)
+                .header("mServerLinks | by powercas_gamer\n")
+                .serializers(builder -> {
+                    builder.registerAnnotatedObjects(org.spongepowered.configurate.kotlin.ObjectMappingKt.objectMapperFactory());
+                })
+            )
+
+            .path(hoconPath)
+            .build();
+
+        try {
+            final ConfigurationNode node = oldFormat.load();
+            final C config = node.get(clazz);
+            node.set(clazz, config);
+            newFormat.save(node);
+            return new ConfigurationContainer<>(config, clazz, newFormat, logger);
+        } catch (ConfigurateException exception){
+            logger.error("Could not load {} configuration file", clazz.getSimpleName(), exception);
+            return null;
+        }
+    }
 }

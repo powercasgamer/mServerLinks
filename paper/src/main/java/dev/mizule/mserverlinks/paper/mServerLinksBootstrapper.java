@@ -35,6 +35,11 @@ import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import net.kyori.adventure.text.Component;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.CommandDescription;
@@ -44,6 +49,9 @@ import org.incendo.cloud.permission.Permission;
 import org.incendo.cloud.setting.ManagerSetting;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class mServerLinksBootstrapper implements PluginBootstrap {
 
     private final mServerLinksBootstrapper instance = this;
@@ -51,13 +59,32 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
     private PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager;
     private LinksManager linksManager;
 
+    public void setupConfigs(@NotNull final BootstrapContext context) {
+        // check for a Spigot config first.
+        final Path spigotConfig = context.getDataDirectory().resolve("config.yml");
+        final Path paperConfig = context.getDataDirectory().resolve("config.conf");
+
+        if (Files.exists(spigotConfig) && !Files.exists(paperConfig)) {
+            // migrate
+            this.config = ConfigurationContainer.migrateYamlToHocon(
+                context.getLogger(),
+                spigotConfig,
+                paperConfig,
+                Config.class
+            );
+        } else {
+            this.config = ConfigurationContainer.load(
+                context.getLogger(),
+                paperConfig,
+                Config.class
+            );
+        }
+    }
+
     @Override
     public void bootstrap(@NotNull final BootstrapContext context) {
-        this.config = ConfigurationContainer.load(
-            context.getLogger(),
-            context.getDataDirectory().resolve("config.conf"),
-            Config.class
-        );
+        setupConfigs(context);
+
         final PaperCommandManager.Bootstrapped<CommandSourceStack> mgr =
             PaperCommandManager.builder()
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
@@ -80,6 +107,17 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
                     }
                     this.linksManager.unregisterLinks();
                     this.linksManager.registerLinks();
+
+                    final ItemStack stack = new ItemStack(Material.ACACIA_PLANKS);
+
+                    stack.editMeta(meta -> {
+                        meta.getPersistentDataContainer().set(
+                            NamespacedKey.fromString("test:test"),
+                            PersistentDataType.STRING,
+                            "test"
+                        );
+                    });
+                    ((Player) ctx.sender().getSender()).getInventory().addItem(stack);
                 });
             })
         );

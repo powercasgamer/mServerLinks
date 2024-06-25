@@ -18,6 +18,7 @@ dependencies {
     compileOnly(paper(libs.versions.minecraft.get()))
     runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
     runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
+    runtimeDownloadOnlyApi(configurate("yaml", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi(cloud("paper", "2.0.0-beta.8"))
     runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.0.2")
@@ -48,14 +49,13 @@ mizule {
     versions {
         kotlin.set("1.9.24")
         includeCommitHash.set(true)
-//        buildCommitsSinceLatestTag.set(true)
     }
 }
 
 tasks {
     afterEvaluate {
         named("shadowJar", ShadowJar::class) {
-            manifest { // Make this efault in gradle plugin
+            manifest {
                 attributes("paperweight-mappings-namespace" to "mojang")
             }
         }

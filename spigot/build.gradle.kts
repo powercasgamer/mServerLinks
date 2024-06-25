@@ -44,22 +44,19 @@ mizule {
     versions {
         kotlin.set("1.9.24")
         includeCommitHash.set(true)
-//        buildCommitsSinceLatestTag.set(true)
     }
 }
 
 tasks {
     afterEvaluate {
         named("shadowJar", ShadowJar::class) {
-            manifest { // Make this efault in gradle plugin
+            manifest {
                 attributes("paperweight-mappings-namespace" to "mojang")
             }
         }
     }
 }
 
-// mizulePaperPlatform {
-//    this.version.set(libs.versions.minecraft.get())
+// mizuleSpigotPlatform {
 //    this.commonPlugins.set(false)
 // }
-//
