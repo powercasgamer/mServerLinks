@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] # 0.0.6
+## [2024-06-25] # 0.0.6
 
 ### Added
 - Spoogot support
