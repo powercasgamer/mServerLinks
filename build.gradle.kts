@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.mizule.root)
     alias(libs.plugins.mizule.publishing) apply false
     alias(libs.plugins.mizule.spotless) apply false
+    alias(libs.plugins.mizule.platform.velocity) apply false
     alias(libs.plugins.mizule.platform.paper) apply false
     alias(libs.plugins.mizule.platform.spigot) apply false
     alias(libs.plugins.mizule.kotlin) apply false
