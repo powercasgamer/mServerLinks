@@ -17,7 +17,7 @@ git fetch --tags origin
 ./gradlew clean build
 
 # Create a GitHub release
-gh release create "$version" --latest --verify-tag --generate-notes --title "$version" jars/mServerLinks-Paper-*.jar
+gh release create "$version" --latest --verify-tag --generate-notes --title "$version" jars/mServerLinks-*-*.jar
 
 # Publish the release artifact
 ./gradlew publish -PforceSign=true # Maven

@@ -22,6 +22,7 @@ sequenceOf(
     "bukkit",
     "spigot",
     "paper",
+    "velocity",
 ).forEach {
     include("mserverlinks-$it")
     project(":mserverlinks-$it").projectDir = file(it)

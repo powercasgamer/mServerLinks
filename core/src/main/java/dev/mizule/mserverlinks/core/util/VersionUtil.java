@@ -22,26 +22,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.bukkit.util
+package dev.mizule.mserverlinks.core.util;
 
-import dev.mizule.mserverlinks.core.util.ClassUtil
+import dev.mizule.mserverlinks.core.Constants;
 
-object VersionUtil {
+public class VersionUtil {
 
-    @JvmStatic
-    fun isFolia(): Boolean {
-        return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer")
+    public static boolean isDev() {
+        return Constants.VERSION.contains("-SNAPSHOT") || Constants.VERSION.contains("-DEV");
     }
 
-    @JvmStatic
-    fun isPaper(): Boolean {
-        return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-            "io.papermc.paper.configuration.Configuration"
-        )
+    public static boolean isFolia() {
+        return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
     }
 
-    @JvmStatic
-    fun isSpigot(): Boolean {
-        return ClassUtil.exists("org.spigotmc.SpigotConfig")
+    public static boolean isPaper() {
+        return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists("io.papermc.paper.configuration.Configuration");
     }
+
+    public static boolean isSpigot() {
+        return ClassUtil.exists("org.spigotmc.SpigotConfig");
+    }
+
 }

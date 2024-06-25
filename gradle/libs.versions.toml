@@ -1,17 +1,20 @@
 [versions]
 # minecraft
-mizule = "0.0.1-v201-SNAPSHOT"
+mizule = "0.0.1-v202-SNAPSHOT"
 minecraft = "1.21"
 hangar-publish = "0.1.2"
 desertwell = "2.0.4"
 mod-publish = "0.5.1"
 paper-trail = "1.0.1"
 slf4j = "2.0.13"
+bstats = "3.0.2"
 
 [libraries]
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 papertrail = { module = "io.papermc:paper-trail", version.ref = "paper-trail" }
+bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+bstats-velocity = { module = "org.bstats:bstats-velocity", version.ref = "bstats" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish" }
@@ -24,6 +27,7 @@ mizule-spotless-root = { id = "dev.mizule.mizule-build-logic.spotless.root", ver
 mizule-publishing = { id = "dev.mizule.mizule-build-logic.publishing", version.ref = "mizule" }
 mizule-blossom = { id = "dev.mizule.mizule-build-logic.blossom", version.ref = "mizule" }
 mizule-gremlin = { id = "dev.mizule.mizule-build-logic.gremlin", version.ref = "mizule" }
+mizule-platform-velocity = { id = "dev.mizule.mizule-build-logic.platform.velocity", version.ref = "mizule" }
 mizule-platform-paper = { id = "dev.mizule.mizule-build-logic.platform.paper", version.ref = "mizule" }
 mizule-platform-spigot = { id = "dev.mizule.mizule-build-logic.platform.spigot", version.ref = "mizule" }
 mizule-aggregate-javadoc = { id = "dev.mizule.mizule-build-logic.aggregate.javadoc", version.ref = "mizule" }
