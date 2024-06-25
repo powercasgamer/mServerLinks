@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Spoogot support
+- Configuration migration from YAML to HOCON
 
 ## [202-06-24] # 0.0.5
 
