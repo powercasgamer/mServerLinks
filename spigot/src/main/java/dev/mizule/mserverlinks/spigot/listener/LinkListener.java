@@ -26,7 +26,6 @@ package dev.mizule.mserverlinks.spigot.listener;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
 import dev.mizule.mserverlinks.spigot.mServerLinks;
-import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ServerLinks;
 import org.bukkit.entity.Player;
@@ -55,7 +54,10 @@ public class LinkListener implements Listener {
             final ServerLinks.Type type = link.type();
             if (link.permission() != null && player.hasPermission(permission)) {
                 if (type == null) {
-                    serverLinks.addLink(UpdateUtil.LEGACY_COMPONENT_SERIALIZER.serialize(MiniMessage.miniMessage().deserialize(link.name())), link.uri());
+                    serverLinks.addLink(
+                        mServerLinks.LEGACY_SERIALIZER.serialize(MiniMessage.miniMessage().deserialize(link.name())),
+                        link.uri()
+                    );
                 } else {
                     serverLinks.addLink(type, link.uri());
                 }

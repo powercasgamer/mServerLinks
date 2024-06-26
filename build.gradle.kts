@@ -1,6 +1,7 @@
 import dev.mizule.mizulebuildlogic.MizuleExtension
 import dev.mizule.mizulebuildlogic.publish.MizulePublishExtension
 import dev.mizule.mizulebuildlogic.util.configureIndraJavaVersion
+import dev.mizule.mizulebuildlogic.util.versionString
 
 plugins {
     alias(libs.plugins.mizule.root)
@@ -12,7 +13,6 @@ plugins {
     alias(libs.plugins.mizule.kotlin) apply false
     alias(libs.plugins.mizule.gremlin) apply false
     alias(libs.plugins.mizule.blossom) apply false
-
 }
 
 subprojects {
@@ -39,7 +39,13 @@ subprojects {
 
     extensions.configure(MizuleExtension::class.java) {
         versions {
-            this.kotlin = "1.9.24"
+            this.kotlin = "2.0.0"
+            this.useProjectVersion.set(false)
+            this.useProjectVersionLookup.set(true)
+
+            if (project.versionString().endsWith("-SNAPSHOT")) {
+                this.status.set("DEV")
+            }
         }
     }
 }

@@ -39,7 +39,5 @@ public class UpdateUtil {
 
     public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
         return -2;
-
     }
-
 }

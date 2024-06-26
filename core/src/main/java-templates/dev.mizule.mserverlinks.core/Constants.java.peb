@@ -4,6 +4,7 @@ public final class Constants {
     public static final String VERSION = "{{ version }}";
     public static final String GIT_BRANCH = "{{ git_branch }}";
     public static final String GIT_COMMIT = "{{ git_commit }}";
+    public static final String GIT_TAG = "{{ git_tag }}";
     public static final String GIT_URL = "{{ git_url }}";
     public static final String AUTHOR = "{{ author }}";
     public static final String DESCRIPTION = "{{ description }}";

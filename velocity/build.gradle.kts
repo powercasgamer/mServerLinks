@@ -1,3 +1,4 @@
+import dev.mizule.mizulebuildlogic.util.applyJarMetadata
 import dev.mizule.mizulebuildlogic.util.cloud
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.versionString
@@ -43,6 +44,8 @@ mizule {
         includeCommitHash.set(true)
     }
 }
+
+applyJarMetadata("mserverlinks-velocity")
 
 mizuleVelocityPlatform {
     this.version.set("3.3.0-SNAPSHOT")

@@ -33,7 +33,6 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -94,12 +93,6 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
             .literal("reload")
             .permission(Permission.permission("mserverlinks.reload"))
             .handler(ctx -> {
-                ctx.sender().getSender().sendMessage(Component.text("hai")
-                    .clickEvent(ClickEvent.suggestCommand("/mserverlinks reload")));
-                ctx.sender().getSender().sendMessage(Component.text("hai")
-                    .clickEvent(ClickEvent.callback(cb -> {
-                        cb.sendMessage(Component.text("CALLBACK "));
-                    })));
                 this.config.reload().thenAccept(success -> {
                     if (success) {
                         ctx.sender().getSender().sendRichMessage("Config reloaded!");

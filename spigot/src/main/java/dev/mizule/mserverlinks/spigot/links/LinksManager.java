@@ -26,7 +26,6 @@ package dev.mizule.mserverlinks.spigot.links;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
 import dev.mizule.mserverlinks.spigot.mServerLinks;
-import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ServerLinks;
@@ -66,7 +65,7 @@ public class LinksManager {
             if (type == null) {
                 links.add(Bukkit
                     .getServerLinks()
-                    .addLink(UpdateUtil.LEGACY_COMPONENT_SERIALIZER
+                    .addLink(mServerLinks.LEGACY_SERIALIZER
                         .serialize(MiniMessage.miniMessage().deserialize(link.name())), link.uri()));
             } else {
                 links.add(Bukkit.getServerLinks().addLink(type, link.uri()));

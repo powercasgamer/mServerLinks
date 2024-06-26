@@ -1,5 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import dev.mizule.mizulebuildlogic.util.adventure
+import dev.mizule.mizulebuildlogic.util.applyJarMetadata
 import dev.mizule.mizulebuildlogic.util.cloud
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.spigot
@@ -46,6 +47,8 @@ mizule {
         includeCommitHash.set(true)
     }
 }
+
+applyJarMetadata("mserverlinks-spigot")
 
 tasks {
     afterEvaluate {

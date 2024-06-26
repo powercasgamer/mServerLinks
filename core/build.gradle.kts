@@ -1,3 +1,4 @@
+import dev.mizule.mizulebuildlogic.util.applyJarMetadata
 import dev.mizule.mizulebuildlogic.util.configurate
 
 plugins {
@@ -15,3 +16,5 @@ mizule {
     shadowOptions.enableShadow.set(true)
     enableCopyTask = false
 }
+
+applyJarMetadata("mserverlinks-core")
