@@ -48,8 +48,9 @@ jobs:
           add-job-summary-as-pr-comment: on-failure
           gradle-home-cache-cleanup: true
           build-scan-publish: true
-          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
-          build-scan-terms-of-service-agree: "yes"
+          build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
+          build-scan-terms-of-use-agree: "yes"
+
        # gradle-build-action doesn't support caching files in the project dir
       - name: "cache project local caches"
         uses: actions/cache@v4

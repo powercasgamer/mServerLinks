@@ -25,9 +25,9 @@
 package dev.mizule.mserverlinks.paper;
 
 import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.util.UpdateUtil;
 import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.paper.listener.LinkListener;
-import dev.mizule.mserverlinks.paper.util.UpdateUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;

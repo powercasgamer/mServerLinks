@@ -27,10 +27,11 @@ package dev.mizule.mserverlinks.spigot;
 import dev.mizule.mserverlinks.bukkit.config.Config;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
+import dev.mizule.mserverlinks.core.util.UpdateUtil;
 import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.spigot.links.LinksManager;
 import dev.mizule.mserverlinks.spigot.listener.LinkListener;
-import dev.mizule.mserverlinks.spigot.util.UpdateUtil;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -49,6 +50,11 @@ public class mServerLinks extends JavaPlugin {
     private LegacyPaperCommandManager<CommandSender> commandManager;
     private ConfigurationContainer<Config> config;
     private LinksManager linksManager;
+    public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
+        .character(LegacyComponentSerializer.SECTION_CHAR)
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build();
 
     @Override
     public void onLoad() {

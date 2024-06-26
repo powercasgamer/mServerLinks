@@ -63,16 +63,17 @@ public class mServerLinks {
     private final PluginManager pluginManager;
     private final EventManager eventManager;
     private final ProxyServer proxy;
-    private ConfigurationContainer<Config> config;
-    private LinksManager linksManager;
     private final Metrics.Factory metricsFactory;
     private final Injector injector;
+    private ConfigurationContainer<Config> config;
+    private LinksManager linksManager;
 
     @Inject
-    public mServerLinks(ProxyServer proxy, ComponentLogger logger, final @DataDirectory Path datDirectory,
-                        final PluginManager pluginManager, final EventManager eventManager,
-                        final Metrics.Factory metricsFactory, final Injector injector
-                        ) {
+    public mServerLinks(
+        ProxyServer proxy, ComponentLogger logger, final @DataDirectory Path datDirectory,
+        final PluginManager pluginManager, final EventManager eventManager,
+        final Metrics.Factory metricsFactory, final Injector injector
+    ) {
         this.proxy = proxy;
         this.logger = logger;
         this.dataDirectory = datDirectory;
