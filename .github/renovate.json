@@ -4,6 +4,17 @@
     ":dependencyDashboard"
   ],
   "ignoreDeps": [
-      "dev.mizule.mizule-build-logic"
+      "dev.mizule.mizule-build-logic",
+      "dev.mizule.mizule-build-logic.aggregate.javadoc",
+      "dev.mizule.mizule-build-logic.platform.spigot",
+      "dev.mizule.mizule-build-logic.platform.paper",
+      "dev.mizule.mizule-build-logic.platform.velocity",
+      "dev.mizule.mizule-build-logic.gremlin",
+      "dev.mizule.mizule-build-logic.blossom",
+      "dev.mizule.mizule-build-logic.publishing",
+      "dev.mizule.mizule-build-logic.spotless.root",
+      "dev.mizule.mizule-build-logic.spotless",
+      "dev.mizule.mizule-build-logic.kotlin",
+      "dev.mizule.mizule-build-logic.root"
   ]
 }
