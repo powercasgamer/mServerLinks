@@ -24,10 +24,6 @@
  */
 package dev.mizule.mserverlinks.core.util;
 
-//import com.google.common.base.Charsets;
-//import com.google.gson.Gson;
-//import com.google.gson.JsonObject;
-//import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,28 +38,8 @@ public class UpdateUtil {
     public static final int DISTANCE_UNKNOWN = -2;
 
     public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
-        return 0;
-//        try {
-//            final HttpURLConnection connection = (HttpURLConnection) URI
-//                .create("https://api.github.com/repos/%s/compare/%s...%s".formatted(repo, branch, hash)).toURL().openConnection();
-//            connection.connect();
-//            if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) return DISTANCE_UNKNOWN; // Unknown commit
-//            try (final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
-//                final JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
-//                final String status = obj.get("status").getAsString();
-//                return switch (status) {
-//                    case "identical" -> 0;
-//                    case "behind" -> obj.get("behind_by").getAsInt();
-//                    default -> DISTANCE_ERROR;
-//                };
-//            } catch (final JsonSyntaxException | NumberFormatException e) {
-//                LOGGER.error("Error parsing json from GitHub's API", e);
-//                return DISTANCE_ERROR;
-//            }
-//        } catch (final IOException e) {
-//            LOGGER.error("Error while parsing version", e);
-//            return DISTANCE_ERROR;
-//        }
+        return -2;
+
     }
 
 }
