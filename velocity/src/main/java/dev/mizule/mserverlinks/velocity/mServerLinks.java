@@ -104,6 +104,7 @@ public class mServerLinks {
         );
         this.linksManager = new LinksManager(this);
         this.linksManager.registerLinks();
+        this.linksManager.registerPlayerLinks();
 
         if (this.config().get().bStats()) {
             logger.info("bStats has been enabled, to disable it set 'bStats' to false in the config!");

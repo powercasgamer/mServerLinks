@@ -81,7 +81,7 @@ public class LinksManager {
             final ServerLink.Type type = link.type();
             final String permission = link.permission();
 
-            logger.info("Registering link: {}", name);
+            logger.info("Registering player link: {}", name);
 
             if (type == null) {
                 playerLinks.put(permission, ServerLink.serverLink(

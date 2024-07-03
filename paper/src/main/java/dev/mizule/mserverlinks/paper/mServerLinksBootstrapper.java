@@ -33,6 +33,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -113,11 +114,21 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
                     .version(Version.fromString(Constants.VERSION))
                     .credits(
                         "Author",
-                        AboutMenu.Credit.of("powercas_gamer").description("Click to visit github").url("https://github" +
-                            ".com/powercasgamer")
+                        AboutMenu.Credit.of("powercas_gamer").description("Click to visit github").url(
+                            "https://github.com/powercasgamer")
                     )
                     .buttons(
-                        AboutMenu.Link.of(Constants.GIT_URL).text("GitHub").icon("⛏")
+                        AboutMenu.Link.of(Constants.GIT_URL).text("GitHub").icon("⛏"),
+                        AboutMenu.Link
+                            .of("https://github.com/powercasgamer/mServerLinks/issues")
+                            .text("Issues")
+                            .icon("❌")
+                            .color(TextColor.color(0xff9f0f)),
+                        AboutMenu.Link
+                            .of("https://mizule.dev/discord")
+                            .text("Discord")
+                            .icon("⭐")
+                            .color(TextColor.color(0x6773f5))
                     )
                     .build();
                 ctx.sender().getSender().sendMessage(menu.toComponent());
