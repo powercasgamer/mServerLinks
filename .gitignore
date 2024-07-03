@@ -8,6 +8,7 @@
 # other stuff
 run/
 jars/
+spigot/libs/
 .kotlin
 
 # Created by git when using merge tools for conflicts
