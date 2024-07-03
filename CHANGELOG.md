@@ -2,18 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] # 0.0.7
+## [2024-07-03] # 0.0.7
 
-## Added
+### Added
 - Velocity support
 
-## Changed
+### Changed
 - Moved version utility stuff into one class and add a `isDev()` function for future usage.
 
-## Fixed
+### Fixed
 - Removed debug code
 - Only publishing Paper jar on GitHub releases
-
 
 ## [2024-06-25] # 0.0.6
 
