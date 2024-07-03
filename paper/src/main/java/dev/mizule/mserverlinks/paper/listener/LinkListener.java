@@ -48,7 +48,6 @@ public class LinkListener implements Listener {
         final Player player = event.getPlayer();
         final ServerLinks serverLinks = event.getLinks();
         for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().playerLinks().entrySet()) {
-            final String name = entry.getKey();
             final Link link = entry.getValue();
             final String permission = link.permission();
             final ServerLinks.Type type = link.type();

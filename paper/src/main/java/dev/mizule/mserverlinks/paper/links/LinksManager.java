@@ -26,8 +26,6 @@ package dev.mizule.mserverlinks.paper.links;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
 import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -35,7 +33,6 @@ import org.bukkit.ServerLinks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +56,6 @@ public class LinksManager {
     }
 
     public void registerLinks() {
-        Bukkit.getServerLinks().addLink(Component.text("Hii")
-            .clickEvent(ClickEvent.callback(f -> {
-                f.sendMessage(Component.text("Hello!"));
-            })), URI.create("https://google.com"));
         for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();

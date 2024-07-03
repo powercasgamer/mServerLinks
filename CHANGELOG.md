@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Moved version utility stuff into one class and add a `isDev()` function for future usage.
 
 ## Fixed
+- Removed debug code
 - Only publishing Paper jar on GitHub releases
 
 
