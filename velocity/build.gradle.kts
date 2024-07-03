@@ -61,7 +61,7 @@ afterEvaluate {
             platforms {
                 velocity {
                     jar.set(tasks.named("copyJar", dev.mizule.mizulebuildlogic.task.FileCopyTask::class).get().destination)
-                    platformVersions = listOf("3.3.0")
+                    platformVersions = listOf("3.3")
                 }
             }
         }
@@ -76,7 +76,7 @@ afterEvaluate {
         modrinth {
             accessToken = providers.environmentVariable("MODRINTH_API_KEY")
             projectId = "5E2WANwL"
-            minecraftVersions.add("3.3.0")
+            minecraftVersions.add("1.21")
         }
 
         discord {
