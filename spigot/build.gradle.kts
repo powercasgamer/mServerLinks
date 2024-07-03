@@ -43,7 +43,6 @@ mizule {
     }
 
     versions {
-        kotlin.set("1.9.24")
         includeCommitHash.set(true)
     }
 }
