@@ -11,14 +11,14 @@ sed -i 's/^\(projectVersion=\).*-SNAPSHOT$/\1'"$version"'/' gradle.properties
 git add gradle.properties
 git commit -m "release: $version"
 git tag "v$version" -m "Release version $version"
-git push origin "$version"
+git push origin "v$version"
 
 # Fetch tags and build the project
 git fetch --tags origin
 ./gradlew clean build
 
 # Create a GitHub release
-gh release create "$version" --latest --verify-tag --generate-notes --title "$version" jars/mServerLinks-*-*.jar
+gh release create "v$version" --latest --verify-tag --generate-notes --title "v$version" jars/mServerLinks-*-*.jar
 
 # Publish the release artifact
 ./gradlew publish -PforceSign=true # Maven
