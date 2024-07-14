@@ -4,7 +4,7 @@ pluginManagement {
         gradlePluginPortal()
         maven("https://repo.stellardrift.ca/repository/snapshots/")
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://repo.mizule.dev/testing") // remove
+        maven("https://repo.mizule.dev/releases")
         maven("https://repo.jpenilla.xyz/snapshots")
     }
 }
