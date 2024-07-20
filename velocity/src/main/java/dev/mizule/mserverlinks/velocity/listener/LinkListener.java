@@ -28,6 +28,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.configuration.PlayerEnterConfigurationEvent;
 import com.velocitypowered.api.network.ProtocolState;
+import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.util.ServerLink;
 import dev.mizule.mserverlinks.velocity.links.LinksManager;
@@ -53,6 +54,8 @@ public class LinkListener {
         logger.debug("[PLE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
         final ProtocolState protocolState = player.getProtocolState();
         if (protocolState != ProtocolState.CONFIGURATION && protocolState != ProtocolState.PLAY) return;
+        final ProtocolVersion protocolVersion = player.getProtocolVersion();
+        if (!protocolVersion.noLessThan(ProtocolVersion.MINECRAFT_1_21)) return;
         final List<ServerLink> serverLinks = this.linksManager.links();
         final Map<String, ServerLink> playerLinks = this.linksManager.playerLinks();
 
