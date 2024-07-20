@@ -59,6 +59,7 @@ tasks {
     }
 }
 
-// mizuleSpigotPlatform {
-//    this.commonPlugins.set(false)
-// }
+mizuleSpigotPlatform {
+    this.commonPlugins.set(false)
+    this.version.set("1.21")
+}

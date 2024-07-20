@@ -66,9 +66,4 @@ data class Config(
 
 @ConfigSerializable
 @JvmRecord
-data class Link(
-    val name: String,
-    val url: String,
-    val type: ServerLink.Type? = null,
-    val permission: String? = null,
-)
+data class Link(val name: String, val url: String, val type: ServerLink.Type? = null, val permission: String? = null,)

@@ -1,0 +1,27 @@
+changelog:
+    exclude:
+        labels:
+            - "type: dependencies"
+            - "dependencies"
+    categories:
+        -   title: "🔧 Changes"
+            labels:
+                - "type: breaking"
+                - "breaking"
+        -   title: "✨ Features"
+            labels:
+                - "type: enhancement"
+                - "enhancement"
+                - "type: feature"
+                - "feature"
+        -   title: "🐛 Fixes"
+            labels:
+                - "type: bug"
+                - "bug"
+        -   title: "📚 Documentation"
+            labels:
+                - "type: documentation"
+                - "documentation"
+        -   title: "Other"
+            labels:
+                - "*"

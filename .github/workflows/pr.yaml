@@ -1,32 +1,27 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: [ "**" ]
-    tags-ignore: [ "**" ]
   pull_request:
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
   cancel-in-progress: true
 
-permissions:
-  actions: write
-  contents: write
-
 jobs:
   build:
     if: ${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}
     strategy:
       matrix:
-        java: ["21"]
-        os: ["ubuntu-latest"]
+        java: [ "21" ]
+        os: [ "ubuntu-latest" ]
       fail-fast: true
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -43,25 +38,23 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/main') || github.event_name == 'pull_request' }}
-          dependency-graph: generate-and-submit
-          dependency-graph-continue-on-failure: false
           add-job-summary-as-pr-comment: on-failure
           gradle-home-cache-cleanup: true
           build-scan-publish: true
           build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
           build-scan-terms-of-use-agree: "yes"
 
-       # gradle-build-action doesn't support caching files in the project dir
+          # gradle-build-action doesn't support caching files in the project dir
       - name: "cache project local caches"
         uses: actions/cache@v4
         with:
-            path: |
-                .gradle/caches/VanillaGradle
-                .gradle/loom-cache
-                paper/.gradle/caches/paperweight
-            key: ${{ runner.os }}-project-local-gradle-caches-${{ hashFiles('**/libs.versions.toml', '**/*.gradle*', '**/gradle-wrapper.properties') }}
-            restore-keys: |
-                ${{ runner.os }}-project-local-gradle-caches-
+          path: |
+            .gradle/caches/VanillaGradle
+            .gradle/loom-cache
+            paper/.gradle/caches/paperweight
+          key: ${{ runner.os }}-project-local-gradle-caches-${{ hashFiles('**/libs.versions.toml', '**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-project-local-gradle-caches-
 
       - name: Build with Gradle
         run: ./gradlew build --scan
@@ -76,23 +69,8 @@ jobs:
             */build/reports/
             **/build/reports/
 
-#      - name: Determine status & prepare for publish
-#        if: ${{ runner.os == 'Linux' }}
-#        run: |
-#            if [ "$(./gradlew properties | awk '/^version:/ { print $2; }' | grep '\-SNAPSHOT')" ]; then
-#              echo "STATUS=snapshot" >> $GITHUB_ENV
-#            else
-#              echo "STATUS=release" >> $GITHUB_ENV
-#            fi
-#
-#      - name: Publish
-#        if: ${{ runner.os == 'Linux' && env.STATUS != 'release' && github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') }}
-#        run: ./gradlew publish -x requireClean -x signMavenPublication
-#        env:
-#            ORG_GRADLE_PROJECT_mizuleUsername: ${{ secrets.MAVEN_USERNAME }}
-#            ORG_GRADLE_PROJECT_mizulePassword: ${{ secrets.MAVEN_PASSWORD }}
       - name: "upload artifacts"
         uses: actions/upload-artifact@v4
         with:
-            name: artifacts
-            path: "jars/*.jar"
+          name: artifacts
+          path: "jars/*.jar"
