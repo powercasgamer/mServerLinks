@@ -21,6 +21,7 @@ dependencies {
     runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
     runtimeDownloadOnlyApi(cloud("velocity", "2.0.0-beta.8"))
     implementation(libs.bstats.velocity)
+    compileOnly(libs.miniplaceholders)
 }
 
 mizule {

@@ -8,6 +8,8 @@ mod-publish = "0.6.2"
 paper-trail = "1.0.1"
 slf4j = "2.0.13"
 bstats = "3.0.2"
+placeholderapi = "2.11.6"
+miniplaceholders = "2.2.3"
 
 [libraries]
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
@@ -15,6 +17,8 @@ slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 papertrail = { module = "io.papermc:paper-trail", version.ref = "paper-trail" }
 bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 bstats-velocity = { module = "org.bstats:bstats-velocity", version.ref = "bstats" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version.ref = "miniplaceholders" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish" }

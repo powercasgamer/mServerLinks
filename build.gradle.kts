@@ -24,6 +24,7 @@ subprojects {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://maven.mizule.dev/")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
         maven("https://jitpack.io") {
             mavenContent {
                 includeGroup("net.william278")

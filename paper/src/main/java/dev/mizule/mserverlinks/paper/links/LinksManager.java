@@ -25,6 +25,7 @@
 package dev.mizule.mserverlinks.paper.links;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
+import dev.mizule.mserverlinks.bukkit.util.PlaceholderUtil;
 import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -45,7 +46,7 @@ public class LinksManager {
 
     public LinksManager(final mServerLinksBootstrapper bootstrapper) {
         this.bootstrapper = bootstrapper;
-        this.links  = new ArrayList<>();
+        this.links = new ArrayList<>();
     }
 
     public void unregisterLinks() {
@@ -64,7 +65,10 @@ public class LinksManager {
             logger.info("Registering link: {}", name);
 
             if (type == null) {
-                links.add(Bukkit.getServerLinks().addLink(MiniMessage.miniMessage().deserialize(link.name()), link.uri()));
+                links.add(Bukkit.getServerLinks().addLink(
+                    MiniMessage.miniMessage().deserialize(link.name(), PlaceholderUtil.INSTANCE.tags(null)),
+                    link.uri()
+                ));
             } else {
                 links.add(Bukkit.getServerLinks().addLink(type, link.uri()));
             }

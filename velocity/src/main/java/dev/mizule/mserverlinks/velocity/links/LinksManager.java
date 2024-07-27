@@ -27,9 +27,11 @@ package dev.mizule.mserverlinks.velocity.links;
 import com.velocitypowered.api.util.ServerLink;
 import dev.mizule.mserverlinks.velocity.config.Link;
 import dev.mizule.mserverlinks.velocity.mServerLinks;
+import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +56,8 @@ public class LinksManager {
         for (final ServerLink link : links) {
             logger.info(
                 "Unregistering link: {}",
-                    link.getCustomLabel().orElse(Component.text(link.getBuiltInType().orElseThrow().name())));
+                link.getCustomLabel().orElse(Component.text(link.getBuiltInType().orElseThrow().name()))
+            );
         }
     }
 
@@ -67,7 +70,7 @@ public class LinksManager {
             logger.info("Registering link: {}", name);
 
             if (type == null) {
-                links.add(ServerLink.serverLink(MiniMessage.miniMessage().deserialize(link.name()), link.url()));
+                links.add(ServerLink.serverLink(MiniMessage.miniMessage().deserialize(link.name(), resolvers()), link.url()));
             } else {
                 links.add(ServerLink.serverLink(type, link.url()));
             }
@@ -85,7 +88,7 @@ public class LinksManager {
 
             if (type == null) {
                 playerLinks.put(permission, ServerLink.serverLink(
-                    MiniMessage.miniMessage().deserialize(link.name()),
+                    MiniMessage.miniMessage().deserialize(link.name(), resolvers()),
                     link.url()
                 ));
             } else {
@@ -100,5 +103,14 @@ public class LinksManager {
 
     public Map<String, ServerLink> playerLinks() {
         return playerLinks;
+    }
+
+    private TagResolver resolvers() {
+        final TagResolver.Builder builder = TagResolver.builder();
+
+        if (plugin.proxy().getPluginManager().isLoaded("miniplaceholders")) {
+            builder.resolver(MiniPlaceholders.getGlobalPlaceholders());
+        }
+        return builder.build();
     }
 }

@@ -29,6 +29,7 @@ import com.google.inject.Injector;
 import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginManager;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
@@ -54,7 +55,8 @@ import java.nio.file.Path;
     name = Constants.NAME,
     version = Constants.VERSION,
     authors = Constants.AUTHOR,
-    description = Constants.DESCRIPTION
+    description = Constants.DESCRIPTION,
+    dependencies = {@Dependency(id = "miniplaceholders", optional = true)}
 )
 public class mServerLinks {
 

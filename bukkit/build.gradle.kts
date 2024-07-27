@@ -1,3 +1,4 @@
+import dev.mizule.mizulebuildlogic.util.adventure
 import dev.mizule.mizulebuildlogic.util.configurate
 import dev.mizule.mizulebuildlogic.util.paper
 
@@ -9,6 +10,10 @@ dependencies {
     api(projects.mserverlinksCore)
     compileOnly(paper(libs.versions.minecraft.get()))
     compileOnly(kotlin("stdlib-jdk8"))
+    compileOnly(libs.placeholderapi)
+    compileOnly(libs.miniplaceholders)
+    compileOnly(adventure("text-minimessage", "4.17.0"))
+    compileOnly(adventure("text-serializer-legacy", "4.17.0"))
     compileOnly(configurate("core", "4.2.0-SNAPSHOT"))
 }
 

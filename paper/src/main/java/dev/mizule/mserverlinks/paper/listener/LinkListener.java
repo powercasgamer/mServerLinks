@@ -25,6 +25,7 @@
 package dev.mizule.mserverlinks.paper.listener;
 
 import dev.mizule.mserverlinks.bukkit.config.Link;
+import dev.mizule.mserverlinks.bukkit.util.PlaceholderUtil;
 import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ServerLinks;
@@ -53,7 +54,8 @@ public class LinkListener implements Listener {
             final ServerLinks.Type type = link.type();
             if (link.permission() != null && player.hasPermission(permission)) {
                 if (type == null) {
-                    serverLinks.addLink(MiniMessage.miniMessage().deserialize(link.name()), link.uri());
+                    serverLinks.addLink(MiniMessage.miniMessage().deserialize(link.name(), PlaceholderUtil.INSTANCE.tags(player)),
+                        link.uri());
                 } else {
                     serverLinks.addLink(type, link.uri());
                 }

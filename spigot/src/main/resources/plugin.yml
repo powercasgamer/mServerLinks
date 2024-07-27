@@ -3,6 +3,8 @@ version: ${pluginVersion}
 api-version: "1.21"
 main: dev.mizule.mserverlinks.spigot.mServerLinks
 authors: [ ${pluginAuthor} ]
+softdepend:
+  - PlaceholderAPI
 
 libraries:
     - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24
