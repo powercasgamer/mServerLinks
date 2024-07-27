@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] # 0.0.9
+
+### Added
+- Placeholder support. You can now use placeholders from PlaceholderAPI and MiniPlaceholders. For PlaceholderAPI you use 
+  `<papi:placeholder>` for example, `<papi:player_name>`.
+
 ## [2024-07-03] # 0.0.7
 
 ### Added
