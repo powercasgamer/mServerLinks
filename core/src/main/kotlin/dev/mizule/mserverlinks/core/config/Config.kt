@@ -22,9 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.velocity.config
+package dev.mizule.mserverlinks.core.config
 
-import com.velocitypowered.api.util.ServerLink
+import dev.mizule.mserverlinks.core.model.ServerLinkType
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment
 import org.spongepowered.configurate.objectmapping.meta.Setting
@@ -48,7 +48,7 @@ data class Config(
     )
     val links: Map<String, Link> = mapOf(
         "example" to Link("<red>Example", "https://example.com"),
-        "bug" to Link("Report a Bug", "https://example.com", ServerLink.Type.BUG_REPORT),
+        "bug" to Link("Report a Bug", "https://example.com", ServerLinkType.BUG_REPORT),
     ),
 
     @Comment(
@@ -66,4 +66,4 @@ data class Config(
 
 @ConfigSerializable
 @JvmRecord
-data class Link(val name: String, val url: String, val type: ServerLink.Type? = null, val permission: String? = null,)
+data class Link(val name: String, val url: String, val type: ServerLinkType? = null, val permission: String? = null)

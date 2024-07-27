@@ -24,8 +24,8 @@
  */
 package dev.mizule.mserverlinks.spigot;
 
-import dev.mizule.mserverlinks.bukkit.config.Config;
 import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.config.Config;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
 import dev.mizule.mserverlinks.core.util.UpdateUtil;
 import dev.mizule.mserverlinks.core.util.VersionUtil;
