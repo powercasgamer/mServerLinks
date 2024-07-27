@@ -24,7 +24,8 @@
  */
 package dev.mizule.mserverlinks.spigot.links;
 
-import dev.mizule.mserverlinks.bukkit.config.Link;
+import dev.mizule.mserverlinks.bukkit.util.LinkUtil;
+import dev.mizule.mserverlinks.core.config.Link;
 import dev.mizule.mserverlinks.spigot.mServerLinks;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ import org.bukkit.ServerLinks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +60,8 @@ public class LinksManager {
         for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
-            final ServerLinks.Type type = link.type();
+            final ServerLinks.Type type = LinkUtil.toBukkitLink(link.type());
+            final URI uri = URI.create(link.url());
 
             logger.info("Registering link: {}", name);
 
@@ -66,9 +69,9 @@ public class LinksManager {
                 links.add(Bukkit
                     .getServerLinks()
                     .addLink(mServerLinks.LEGACY_SERIALIZER
-                        .serialize(MiniMessage.miniMessage().deserialize(link.name())), link.uri()));
+                        .serialize(MiniMessage.miniMessage().deserialize(link.name())), uri));
             } else {
-                links.add(Bukkit.getServerLinks().addLink(type, link.uri()));
+                links.add(Bukkit.getServerLinks().addLink(type, uri));
             }
         }
     }

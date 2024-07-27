@@ -24,8 +24,8 @@
  */
 package dev.mizule.mserverlinks.paper;
 
-import dev.mizule.mserverlinks.bukkit.config.Config;
 import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.config.Config;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
 import dev.mizule.mserverlinks.paper.links.LinksManager;
 import io.papermc.paper.command.brigadier.CommandSourceStack;

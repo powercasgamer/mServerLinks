@@ -24,11 +24,15 @@
  */
 package dev.mizule.mserverlinks.core.config;
 
+import dev.mizule.mserverlinks.core.config.serializer.ServerLinkTypeSerializer;
+import dev.mizule.mserverlinks.core.model.ServerLinkType;
+import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.kotlin.ObjectMappingKt;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -107,7 +111,8 @@ public final class ConfigurationContainer<C> {
                 .shouldCopyDefaults(true)
                 .header("mServerLinks | by powercas_gamer\n")
                 .serializers(builder -> {
-                    builder.registerAnnotatedObjects(org.spongepowered.configurate.kotlin.ObjectMappingKt.objectMapperFactory());
+                    builder.register(TypeToken.get(ServerLinkType.class), new ServerLinkTypeSerializer());
+                    builder.registerAnnotatedObjects(ObjectMappingKt.objectMapperFactory());
                 })
             )
 

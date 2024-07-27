@@ -3,6 +3,7 @@ import dev.mizule.mizulebuildlogic.util.configurate
 
 plugins {
     id(libs.plugins.mizule.blossom.get().pluginId)
+    id(libs.plugins.mizule.kotlin.get().pluginId)
 }
 
 dependencies {

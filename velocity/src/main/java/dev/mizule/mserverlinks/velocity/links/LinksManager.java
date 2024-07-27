@@ -25,8 +25,9 @@
 package dev.mizule.mserverlinks.velocity.links;
 
 import com.velocitypowered.api.util.ServerLink;
-import dev.mizule.mserverlinks.velocity.config.Link;
+import dev.mizule.mserverlinks.core.config.Link;
 import dev.mizule.mserverlinks.velocity.mServerLinks;
+import dev.mizule.mserverlinks.velocity.util.LinkUtil;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -65,7 +66,7 @@ public class LinksManager {
         for (final Map.Entry<String, Link> entry : this.plugin.config().get().links().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
-            final ServerLink.Type type = link.type();
+            final ServerLink.Type type = LinkUtil.toVelocityLink(link.type());
 
             logger.info("Registering link: {}", name);
 
@@ -81,7 +82,7 @@ public class LinksManager {
         for (final Map.Entry<String, Link> entry : this.plugin.config().get().playerLinks().entrySet()) {
             final String name = entry.getKey();
             final Link link = entry.getValue();
-            final ServerLink.Type type = link.type();
+            final ServerLink.Type type = LinkUtil.toVelocityLink(link.type());
             final String permission = link.permission();
 
             logger.info("Registering player link: {}", name);

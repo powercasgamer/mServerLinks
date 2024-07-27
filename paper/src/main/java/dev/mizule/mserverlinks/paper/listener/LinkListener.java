@@ -24,8 +24,9 @@
  */
 package dev.mizule.mserverlinks.paper.listener;
 
-import dev.mizule.mserverlinks.bukkit.config.Link;
+import dev.mizule.mserverlinks.bukkit.util.LinkUtil;
 import dev.mizule.mserverlinks.bukkit.util.PlaceholderUtil;
+import dev.mizule.mserverlinks.core.config.Link;
 import dev.mizule.mserverlinks.paper.mServerLinksBootstrapper;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ServerLinks;
@@ -34,6 +35,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
 
+import java.net.URI;
 import java.util.Map;
 
 public class LinkListener implements Listener {
@@ -51,13 +53,14 @@ public class LinkListener implements Listener {
         for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().playerLinks().entrySet()) {
             final Link link = entry.getValue();
             final String permission = link.permission();
-            final ServerLinks.Type type = link.type();
+            final ServerLinks.Type type = LinkUtil.toBukkitLink(link.type());
+            final URI uri = URI.create(link.url());
             if (link.permission() != null && player.hasPermission(permission)) {
                 if (type == null) {
                     serverLinks.addLink(MiniMessage.miniMessage().deserialize(link.name(), PlaceholderUtil.INSTANCE.tags(player)),
-                        link.uri());
+                        uri);
                 } else {
-                    serverLinks.addLink(type, link.uri());
+                    serverLinks.addLink(type, uri);
                 }
             }
         }
