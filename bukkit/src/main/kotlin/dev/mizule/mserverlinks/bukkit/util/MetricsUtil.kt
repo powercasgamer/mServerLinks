@@ -34,7 +34,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.util.concurrent.Callable
 import java.util.function.Supplier
 
-object StatsUtil {
+object MetricsUtil {
 
     private var metrics: Metrics? = null
 

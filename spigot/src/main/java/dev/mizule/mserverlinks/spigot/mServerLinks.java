@@ -24,7 +24,7 @@
  */
 package dev.mizule.mserverlinks.spigot;
 
-import dev.mizule.mserverlinks.bukkit.util.StatsUtil;
+import dev.mizule.mserverlinks.bukkit.util.MetricsUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.Config;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
@@ -78,7 +78,7 @@ public class mServerLinks extends JavaPlugin {
         getLogger().info("mServerLinks has been enabled!");
         if (this.config.get().bStats()) {
             getLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            StatsUtil.init(this);
+            MetricsUtil.init(this);
         }
 
         commands();
@@ -90,7 +90,7 @@ public class mServerLinks extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        StatsUtil.shutdown();
+        MetricsUtil.shutdown();
         getLogger().info("mServerLinks has een disabled!");
     }
 

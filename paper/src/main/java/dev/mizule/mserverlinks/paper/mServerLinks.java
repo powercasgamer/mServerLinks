@@ -24,7 +24,7 @@
  */
 package dev.mizule.mserverlinks.paper;
 
-import dev.mizule.mserverlinks.bukkit.util.StatsUtil;
+import dev.mizule.mserverlinks.bukkit.util.MetricsUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.util.UpdateUtil;
 import dev.mizule.mserverlinks.paper.listener.LinkListener;
@@ -53,7 +53,7 @@ public class mServerLinks extends JavaPlugin {
         getLogger().info("mServerLinks has been enabled!");
         if (this.bootstrapper.config().get().bStats()) {
             getSLF4JLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            StatsUtil.init(this);
+            MetricsUtil.init(this);
         }
 
         if (false) {
@@ -71,7 +71,7 @@ public class mServerLinks extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        StatsUtil.shutdown();
+        MetricsUtil.shutdown();
         getLogger().info("mServerLinks has been disabled!");
     }
 
