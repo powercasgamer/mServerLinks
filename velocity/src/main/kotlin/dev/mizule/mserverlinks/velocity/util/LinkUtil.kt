@@ -22,17 +22,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.velocity.util
 
+import com.velocitypowered.api.util.ServerLink
+import dev.mizule.mserverlinks.core.model.ServerLinkType
 
-/**
- * From Paper, contributed by Techcable Techcable@outlook.com in PaperMC/Paper/GH-65
- */
-public class UpdateUtil {
-    public static final int DISTANCE_ERROR = -1;
-    public static final int DISTANCE_UNKNOWN = -2;
+object LinkUtil {
 
-    public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
-        return -2;
+    @JvmStatic
+    fun toVelocityLink(serverLinkType: ServerLinkType?): ServerLink.Type? = when (serverLinkType) {
+        ServerLinkType.BUG_REPORT -> ServerLink.Type.BUG_REPORT
+        ServerLinkType.COMMUNITY_GUIDELINES -> ServerLink.Type.COMMUNITY_GUIDELINES
+        ServerLinkType.SUPPORT -> ServerLink.Type.SUPPORT
+        ServerLinkType.STATUS -> ServerLink.Type.STATUS
+        ServerLinkType.FEEDBACK -> ServerLink.Type.FEEDBACK
+        ServerLinkType.COMMUNITY -> ServerLink.Type.COMMUNITY
+        ServerLinkType.WEBSITE -> ServerLink.Type.WEBSITE
+        ServerLinkType.FORUMS -> ServerLink.Type.FORUMS
+        ServerLinkType.NEWS -> ServerLink.Type.NEWS
+        ServerLinkType.ANNOUNCEMENTS -> ServerLink.Type.ANNOUNCEMENTS
+        ServerLinkType.CUSTOM -> null
+        else -> null // throw IllegalArgumentException("Unknown ServerLinkType: ${serverLinkType.name}")
     }
 }

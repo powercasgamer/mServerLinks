@@ -22,17 +22,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.bukkit.util
 
+import dev.mizule.mserverlinks.core.model.ServerLinkType
+import org.bukkit.ServerLinks
 
-/**
- * From Paper, contributed by Techcable Techcable@outlook.com in PaperMC/Paper/GH-65
- */
-public class UpdateUtil {
-    public static final int DISTANCE_ERROR = -1;
-    public static final int DISTANCE_UNKNOWN = -2;
+object LinkUtil {
 
-    public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
-        return -2;
+    @JvmStatic
+    fun toBukkitLink(serverLinkType: ServerLinkType?): ServerLinks.Type? = when (serverLinkType) {
+        ServerLinkType.BUG_REPORT -> ServerLinks.Type.REPORT_BUG
+        ServerLinkType.COMMUNITY_GUIDELINES -> ServerLinks.Type.COMMUNITY_GUIDELINES
+        ServerLinkType.SUPPORT -> ServerLinks.Type.SUPPORT
+        ServerLinkType.STATUS -> ServerLinks.Type.STATUS
+        ServerLinkType.FEEDBACK -> ServerLinks.Type.FEEDBACK
+        ServerLinkType.COMMUNITY -> ServerLinks.Type.COMMUNITY
+        ServerLinkType.WEBSITE -> ServerLinks.Type.WEBSITE
+        ServerLinkType.FORUMS -> ServerLinks.Type.FORUMS
+        ServerLinkType.NEWS -> ServerLinks.Type.NEWS
+        ServerLinkType.ANNOUNCEMENTS -> ServerLinks.Type.ANNOUNCEMENTS
+        ServerLinkType.CUSTOM -> null
+        else -> null // throw IllegalArgumentException("Unknown ServerLinkType: ${serverLinkType.name}")
     }
 }

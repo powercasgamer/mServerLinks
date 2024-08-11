@@ -97,7 +97,7 @@ afterEvaluate {
         modrinth {
             accessToken = providers.environmentVariable("MODRINTH_API_KEY")
             projectId = "5E2WANwL"
-            minecraftVersions.add("1.21")
+            minecraftVersions.addAll("1.21", "1.21.1")
         }
 
         discord {

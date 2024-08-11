@@ -22,17 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.config.serializer;
 
+import dev.mizule.mserverlinks.core.model.ServerLinkType;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
 
-/**
- * From Paper, contributed by Techcable Techcable@outlook.com in PaperMC/Paper/GH-65
- */
-public class UpdateUtil {
-    public static final int DISTANCE_ERROR = -1;
-    public static final int DISTANCE_UNKNOWN = -2;
+import java.lang.reflect.Type;
 
-    public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
-        return -2;
+public class ServerLinkTypeSerializer implements TypeSerializer<ServerLinkType> {
+
+    @Override
+    public ServerLinkType deserialize(final Type type, final ConfigurationNode node) throws SerializationException {
+        return ServerLinkType.fromName(node.getString());
+    }
+
+    @Override
+    public void serialize(final Type type, @Nullable final ServerLinkType obj, final ConfigurationNode node) throws
+        SerializationException {
+        if (obj == null) {
+            node.raw(null);
+        } else {
+            node.set(obj.getName());
+        }
     }
 }
