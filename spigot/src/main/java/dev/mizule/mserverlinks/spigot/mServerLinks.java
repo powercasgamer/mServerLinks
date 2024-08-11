@@ -24,6 +24,7 @@
  */
 package dev.mizule.mserverlinks.spigot;
 
+import dev.mizule.mserverlinks.bukkit.util.StatsUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.config.Config;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
@@ -32,7 +33,6 @@ import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.spigot.links.LinksManager;
 import dev.mizule.mserverlinks.spigot.listener.LinkListener;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -78,11 +78,7 @@ public class mServerLinks extends JavaPlugin {
         getLogger().info("mServerLinks has been enabled!");
         if (this.config.get().bStats()) {
             getLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            if (!VersionUtil.isDev()) {
-                final Metrics metrics = new Metrics(this, 22368);
-            } else {
-                getLogger().warning("You are running a development build of mServerLinks, metrics are disabled!");
-            }
+            StatsUtil.init(this);
         }
 
         commands();
@@ -94,6 +90,7 @@ public class mServerLinks extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        StatsUtil.shutdown();
         getLogger().info("mServerLinks has een disabled!");
     }
 
