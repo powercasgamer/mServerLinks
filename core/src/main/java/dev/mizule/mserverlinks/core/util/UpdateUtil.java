@@ -24,16 +24,11 @@
  */
 package dev.mizule.mserverlinks.core.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * From Paper, contributed by Techcable Techcable@outlook.com in PaperMC/Paper/GH-65
  */
 public class UpdateUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateUtil.class);
-
     public static final int DISTANCE_ERROR = -1;
     public static final int DISTANCE_UNKNOWN = -2;
 

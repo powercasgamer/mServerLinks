@@ -39,8 +39,10 @@ subprojects {
     }
 
     extensions.configure(MizuleExtension::class.java) {
+        this.dependencyConflictDetection = false
+        this.dependencyConflictResolution = false
         versions {
-            this.kotlin = "2.0.0"
+            this.kotlin = "2.0.10"
             this.useProjectVersion.set(false)
             this.useProjectVersionLookup.set(true)
 
