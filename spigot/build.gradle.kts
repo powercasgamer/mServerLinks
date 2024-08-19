@@ -20,7 +20,7 @@ dependencies {
         isTransitive = false
     }
     api(cloud("paper", "2.0.0-beta.8"))
-    api("org.bstats:bstats-bukkit:3.0.2")
+    api("org.bstats:bstats-bukkit:3.0.3")
     api(adventure("text-minimessage", "4.17.0"))
     api(adventure("text-serializer-legacy", "4.17.0"))
 }
