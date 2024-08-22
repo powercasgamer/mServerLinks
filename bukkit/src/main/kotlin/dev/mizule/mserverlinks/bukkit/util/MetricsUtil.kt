@@ -48,51 +48,31 @@ object MetricsUtil {
         metrics = Metrics(plugin, 22368).apply {
             val onlineMode = Bukkit.getOnlineMode()
             val bungeecord = Bukkit.spigot().spigotConfig.getBoolean("bungeecord", false)
-            val bungeecordOnlineMode =
-                if (VersionUtil.isPaper()) {
-                    Bukkit.spigot().paperConfig.getBoolean("proxies.bungee-cord.online-mode", false)
-                } else {
-                    false
-                }
-            val velocity = if (VersionUtil.isPaper()) {
-                Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.enabled", false)
-            } else {
-                false
+            val bungeecordOnlineMode = when {
+                VersionUtil.isPaper() -> Bukkit.spigot().paperConfig.getBoolean("proxies.bungee-cord.online-mode", false)
+                else -> null
             }
-            val velocityOnlineMode = if (VersionUtil.isPaper()) {
-                Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.online-mode", false)
-            } else {
-                false
-            }
+            val velocity = VersionUtil.isPaper() && Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.enabled", false)
+            val velocityOnlineMode =
+                VersionUtil.isPaper() && Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.online-mode", false)
 
-            addDrilldownPieChart(
-                "authentication",
-                Callable {
-                    val map = mutableMapOf<String, Map<String, Int>>()
+            addDrilldownPieChart("authentication") {
+                val map = mutableMapOf<String, Map<String, Int>>()
 
-                    val mode: String
-                    val details: String
-
-                    if (onlineMode) {
-                        mode = "Online Mode"
-                        details = "Standalone"
-                    } else {
-                        if (velocity) {
-                            mode = "Proxied"
-                            details = if (velocityOnlineMode) "Velocity (Online Mode)" else "Velocity (Offline Mode)"
-                        } else if (bungeecord) {
-                            mode = "Proxied"
-                            details = if (bungeecordOnlineMode) "BungeeCord (Online Mode)" else "BungeeCord (Offline Mode)"
-                        } else {
-                            mode = "Offline Mode"
-                            details = "Standalone"
-                        }
+                val (mode, details) = when {
+                    onlineMode -> "Online Mode" to "Standalone"
+                    velocity -> "Proxied" to if (velocityOnlineMode) "Velocity (Online Mode)" else "Velocity (Offline Mode)"
+                    bungeecord -> "Proxied" to when (bungeecordOnlineMode) {
+                        true -> "BungeeCord (Online Mode)"
+                        false -> "BungeeCord (Offline Mode)"
+                        null -> "BungeeCord (Unknown)"
                     }
-
-                    map[mode] = mapOf(details to 1)
-                    map
+                    else -> "Offline Mode" to "Standalone"
                 }
-            )
+
+                map[mode] = mapOf(details to 1)
+                map
+            }
         }
     }
 
