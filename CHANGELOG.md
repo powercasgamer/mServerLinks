@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] # 0.0.9
+## [2024-08-23] # 0.0.9
 
 ### Added
 - Placeholder support. You can now use placeholders from PlaceholderAPI and MiniPlaceholders. For PlaceholderAPI you use 
   `<papi:placeholder>` for example, `<papi:player_name>`.
+- Some more bStats metrics
+
+### Fixed
+- An error being thrown on Velocity when a player joins with a version older than 1.21 [#9](https://github.com/powercasgamer/mServerLinks/pull/9)
 
 ## [2024-07-03] # 0.0.7
 
