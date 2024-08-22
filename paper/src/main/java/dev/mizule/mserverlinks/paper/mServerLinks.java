@@ -24,12 +24,11 @@
  */
 package dev.mizule.mserverlinks.paper;
 
+import dev.mizule.mserverlinks.bukkit.util.MetricsUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.util.UpdateUtil;
-import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.paper.listener.LinkListener;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.paper.PaperCommandManager;
@@ -54,11 +53,7 @@ public class mServerLinks extends JavaPlugin {
         getLogger().info("mServerLinks has been enabled!");
         if (this.bootstrapper.config().get().bStats()) {
             getSLF4JLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            if (!VersionUtil.isDev()) {
-                final Metrics metrics = new Metrics(this, 22368);
-            } else {
-                getSLF4JLogger().warn("You are running a development build of mServerLinks, metrics are disabled!");
-            }
+            MetricsUtil.init(this);
         }
 
         if (false) {
@@ -76,6 +71,7 @@ public class mServerLinks extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        MetricsUtil.shutdown();
         getLogger().info("mServerLinks has been disabled!");
     }
 
