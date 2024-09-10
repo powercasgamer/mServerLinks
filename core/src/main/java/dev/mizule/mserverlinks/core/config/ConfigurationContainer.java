@@ -25,10 +25,12 @@
 package dev.mizule.mserverlinks.core.config;
 
 import dev.mizule.mserverlinks.core.config.serializer.ServerLinkTypeSerializer;
+import dev.mizule.mserverlinks.core.config.transformations.Transformations;
 import dev.mizule.mserverlinks.core.model.ServerLinkType;
 import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -37,6 +39,7 @@ import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -66,6 +69,7 @@ public final class ConfigurationContainer<C> {
     private final ConfigurationLoader<? extends ConfigurationNode> loader;
     private final Class<C> clazz;
     private final Logger logger;
+    public static final String VERSION_FIELD = "_version";
 
     private ConfigurationContainer(
         final C config,
@@ -77,6 +81,16 @@ public final class ConfigurationContainer<C> {
         this.loader = loader;
         this.clazz = clazz;
         this.logger = logger;
+    }
+
+    public static void veryConfigVersion(final Logger logger, final ConfigurationNode globalNode, final int latestVersion) {
+        final ConfigurationNode version = globalNode.node(ConfigurationContainer.VERSION_FIELD);
+        if (version.virtual()) {
+            logger.warn("The config file didn't have a version set, assuming latest");
+            version.raw(latestVersion);
+        } else if (version.getInt() > latestVersion) {
+            logger.error("Loading a newer configuration than is supported ({} > {})! You may have to backup & delete your config file to start the server.", version.getInt(), latestVersion);
+        }
     }
 
     public CompletableFuture<Boolean> reload() {
@@ -120,7 +134,15 @@ public final class ConfigurationContainer<C> {
             .build();
 
         try {
-            final ConfigurationNode node = loader.load();
+            ConfigurationNode node;
+            if (Files.notExists(path)) {
+                node = CommentedConfigurationNode.root(loader.defaultOptions());
+                node.node(ConfigurationContainer.VERSION_FIELD).raw(Transformations.VERSION_LATEST);
+            } else {
+                node = loader.load();
+                veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+            }
+            node = Transformations.updateNode(node);
             final C config = node.get(clazz);
             node.set(clazz, config);
             loader.save(node);
@@ -146,12 +168,19 @@ public final class ConfigurationContainer<C> {
                     builder.registerAnnotatedObjects(org.spongepowered.configurate.kotlin.ObjectMappingKt.objectMapperFactory());
                 })
             )
-
             .path(path)
             .build();
 
         try {
-            final ConfigurationNode node = loader.load();
+            ConfigurationNode node;
+            if (Files.notExists(path)) {
+                node = CommentedConfigurationNode.root(loader.defaultOptions());
+                node.node(ConfigurationContainer.VERSION_FIELD).raw(Transformations.VERSION_LATEST);
+            } else {
+                node = loader.load();
+                veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+            }
+            Transformations.updateNode(node);
             final C config = node.get(clazz);
             node.set(clazz, config);
             loader.save(node);

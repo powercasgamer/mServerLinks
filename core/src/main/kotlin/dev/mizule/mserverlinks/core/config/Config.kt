@@ -24,6 +24,7 @@
  */
 package dev.mizule.mserverlinks.core.config
 
+import dev.mizule.mserverlinks.core.config.transformations.Transformations
 import dev.mizule.mserverlinks.core.model.ServerLinkType
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment
@@ -62,6 +63,9 @@ data class Config(
     val updateChecker: Boolean = true,
     @Setting(value = "bStats")
     val bStats: Boolean = true,
+
+    @Setting(value = ConfigurationContainer.VERSION_FIELD)
+    val version: Int = Transformations.VERSION_LATEST,
 )
 
 @ConfigSerializable
