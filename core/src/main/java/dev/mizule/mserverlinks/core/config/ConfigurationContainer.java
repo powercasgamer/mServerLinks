@@ -25,6 +25,7 @@
 package dev.mizule.mserverlinks.core.config;
 
 import dev.mizule.mserverlinks.core.config.serializer.ServerLinkTypeSerializer;
+import dev.mizule.mserverlinks.core.config.transformations.Transformations;
 import dev.mizule.mserverlinks.core.model.ServerLinkType;
 import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,7 @@ import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -62,21 +64,37 @@ import java.util.concurrent.atomic.AtomicReference;
  * KickRedirect: https://github.com/4drian3d/KickRedirect/
  */
 public final class ConfigurationContainer<C> {
+
     private final AtomicReference<C> config;
     private final ConfigurationLoader<? extends ConfigurationNode> loader;
     private final Class<C> clazz;
     private final Logger logger;
+    public static final String VERSION_FIELD = "_version";
 
     private ConfigurationContainer(
         final C config,
         final Class<C> clazz,
-        final ConfigurationLoader<? extends ConfigurationNode> loader,
+        final ConfigurationLoader<? extends @NotNull ConfigurationNode> loader,
         final Logger logger
     ) {
         this.config = new AtomicReference<>(config);
         this.loader = loader;
         this.clazz = clazz;
         this.logger = logger;
+    }
+
+    public static void veryConfigVersion(final Logger logger, final ConfigurationNode globalNode, final int latestVersion) {
+        final ConfigurationNode version = globalNode.node(ConfigurationContainer.VERSION_FIELD);
+        if (version.virtual()) {
+            logger.warn("The config file didn't have a version set, assuming latest");
+            version.raw(latestVersion);
+        } else if (version.getInt() > latestVersion) {
+            logger.error(
+                "Loading a newer configuration than is supported ({} > {})! You may have to backup & delete your config file to start the server.",
+                version.getInt(),
+                latestVersion
+            );
+        }
     }
 
     public CompletableFuture<Boolean> reload() {
@@ -115,17 +133,23 @@ public final class ConfigurationContainer<C> {
                     builder.registerAnnotatedObjects(ObjectMappingKt.objectMapperFactory());
                 })
             )
-
             .path(path)
             .build();
 
         try {
-            final ConfigurationNode node = loader.load();
+            ConfigurationNode node;
+            if (Files.notExists(path)) {
+                node = loader.load();
+                node.node(ConfigurationContainer.VERSION_FIELD).raw(Transformations.VERSION_LATEST);
+            } else {
+                node = Transformations.updateNode(loader.load());
+                veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+            }
             final C config = node.get(clazz);
             node.set(clazz, config);
             loader.save(node);
             return new ConfigurationContainer<>(config, clazz, loader, logger);
-        } catch (ConfigurateException exception){
+        } catch (ConfigurateException exception) {
             logger.error("Could not load {} configuration file", clazz.getSimpleName(), exception);
             return null;
         }
@@ -143,20 +167,27 @@ public final class ConfigurationContainer<C> {
                 .shouldCopyDefaults(true)
                 .header("mServerLinks | by powercas_gamer\n")
                 .serializers(builder -> {
+                    builder.register(TypeToken.get(ServerLinkType.class), new ServerLinkTypeSerializer());
                     builder.registerAnnotatedObjects(org.spongepowered.configurate.kotlin.ObjectMappingKt.objectMapperFactory());
                 })
             )
-
             .path(path)
             .build();
 
         try {
-            final ConfigurationNode node = loader.load();
+            ConfigurationNode node;
+            if (Files.notExists(path)) {
+                node = loader.load();
+                node.node(ConfigurationContainer.VERSION_FIELD).raw(Transformations.VERSION_LATEST);
+            } else {
+                node = Transformations.updateNode(loader.load());
+                veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+            }
             final C config = node.get(clazz);
             node.set(clazz, config);
             loader.save(node);
             return new ConfigurationContainer<>(config, clazz, loader, logger);
-        } catch (ConfigurateException exception){
+        } catch (ConfigurateException exception) {
             logger.error("Could not load {} configuration file", clazz.getSimpleName(), exception);
             return null;
         }
@@ -196,12 +227,14 @@ public final class ConfigurationContainer<C> {
             .build();
 
         try {
-            final ConfigurationNode node = oldFormat.load();
+            ConfigurationNode node;
+            node = Transformations.updateNode(oldFormat.load());
+            veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
             final C config = node.get(clazz);
             node.set(clazz, config);
             newFormat.save(node);
             return new ConfigurationContainer<>(config, clazz, newFormat, logger);
-        } catch (ConfigurateException exception){
+        } catch (ConfigurateException exception) {
             logger.error("Could not load {} configuration file", clazz.getSimpleName(), exception);
             return null;
         }
