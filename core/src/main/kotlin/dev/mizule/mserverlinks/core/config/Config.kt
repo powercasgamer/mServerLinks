@@ -65,6 +65,7 @@ data class Config(
     val bStats: Boolean = true,
 
     @Setting(value = ConfigurationContainer.VERSION_FIELD)
+    @Comment("The version of the configuration file\nDo not change this value\nThis is used for internal purposes")
     val version: Int = Transformations.VERSION_LATEST,
 )
 
