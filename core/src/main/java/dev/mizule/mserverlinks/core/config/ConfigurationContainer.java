@@ -69,7 +69,7 @@ public final class ConfigurationContainer<C> {
     private final ConfigurationLoader<? extends ConfigurationNode> loader;
     private final Class<C> clazz;
     private final Logger logger;
-    public static final String VERSION_FIELD = "_version";
+    public static final String VERSION_FIELD = "config-version";
 
     private ConfigurationContainer(
         final C config,
