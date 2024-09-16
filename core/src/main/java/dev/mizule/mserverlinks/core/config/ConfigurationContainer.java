@@ -83,7 +83,7 @@ public final class ConfigurationContainer<C> {
         this.logger = logger;
     }
 
-    public static void veryConfigVersion(final Logger logger, final ConfigurationNode globalNode, final int latestVersion) {
+    public static void verifyConfigVersion(final Logger logger, final ConfigurationNode globalNode, final int latestVersion) {
         final ConfigurationNode version = globalNode.node(ConfigurationContainer.VERSION_FIELD);
         if (version.virtual()) {
             logger.warn("The config file didn't have a version set, assuming latest");
@@ -143,7 +143,7 @@ public final class ConfigurationContainer<C> {
                 node.node(ConfigurationContainer.VERSION_FIELD).raw(Transformations.VERSION_LATEST);
             } else {
                 node = Transformations.updateNode(loader.load());
-                veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+                verifyConfigVersion(logger, node, Transformations.VERSION_LATEST);
             }
             final C config = node.get(clazz);
             node.set(clazz, config);
@@ -181,7 +181,7 @@ public final class ConfigurationContainer<C> {
                 node.node(ConfigurationContainer.VERSION_FIELD).raw(Transformations.VERSION_LATEST);
             } else {
                 node = Transformations.updateNode(loader.load());
-                veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+                verifyConfigVersion(logger, node, Transformations.VERSION_LATEST);
             }
             final C config = node.get(clazz);
             node.set(clazz, config);
@@ -229,7 +229,7 @@ public final class ConfigurationContainer<C> {
         try {
             ConfigurationNode node;
             node = Transformations.updateNode(oldFormat.load());
-            veryConfigVersion(logger, node, Transformations.VERSION_LATEST);
+            verifyConfigVersion(logger, node, Transformations.VERSION_LATEST);
             final C config = node.get(clazz);
             node.set(clazz, config);
             newFormat.save(node);
