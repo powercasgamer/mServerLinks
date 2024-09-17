@@ -36,76 +36,76 @@ import java.util.function.Supplier
 
 object MetricsUtil {
 
-    private var metrics: Metrics? = null
+  private var metrics: Metrics? = null
 
-    @JvmStatic
-    fun init(plugin: JavaPlugin) {
-        if (VersionUtil.isDev()) {
-            plugin.logger.warning("You are running a development build of mServerLinks, metrics are disabled!")
-            return
+  @JvmStatic
+  fun init(plugin: JavaPlugin) {
+    if (VersionUtil.isDev()) {
+      plugin.logger.warning("You are running a development build of mServerLinks, metrics are disabled!")
+      return
+    }
+
+    metrics = Metrics(plugin, 22368).apply {
+      val onlineMode = Bukkit.getOnlineMode()
+      val bungeecord = Bukkit.spigot().spigotConfig.getBoolean("bungeecord", false)
+      val bungeecordOnlineMode = when {
+        VersionUtil.isPaper() -> Bukkit.spigot().paperConfig.getBoolean("proxies.bungee-cord.online-mode", false)
+        else -> null
+      }
+      val velocity = VersionUtil.isPaper() && Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.enabled", false)
+      val velocityOnlineMode =
+        VersionUtil.isPaper() && Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.online-mode", false)
+
+      addDrilldownPieChart("authentication") {
+        val map = mutableMapOf<String, Map<String, Int>>()
+
+        val (mode, details) = when {
+          onlineMode -> "Online Mode" to "Standalone"
+          velocity -> "Proxied" to if (velocityOnlineMode) "Velocity (Online Mode)" else "Velocity (Offline Mode)"
+          bungeecord -> "Proxied" to when (bungeecordOnlineMode) {
+            true -> "BungeeCord (Online Mode)"
+            false -> "BungeeCord (Offline Mode)"
+            null -> "BungeeCord (Unknown)"
+          }
+
+          else -> "Offline Mode" to "Standalone"
         }
 
-        metrics = Metrics(plugin, 22368).apply {
-            val onlineMode = Bukkit.getOnlineMode()
-            val bungeecord = Bukkit.spigot().spigotConfig.getBoolean("bungeecord", false)
-            val bungeecordOnlineMode = when {
-                VersionUtil.isPaper() -> Bukkit.spigot().paperConfig.getBoolean("proxies.bungee-cord.online-mode", false)
-                else -> null
-            }
-            val velocity = VersionUtil.isPaper() && Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.enabled", false)
-            val velocityOnlineMode =
-                VersionUtil.isPaper() && Bukkit.spigot().paperConfig.getBoolean("proxies.velocity.online-mode", false)
-
-            addDrilldownPieChart("authentication") {
-                val map = mutableMapOf<String, Map<String, Int>>()
-
-                val (mode, details) = when {
-                    onlineMode -> "Online Mode" to "Standalone"
-                    velocity -> "Proxied" to if (velocityOnlineMode) "Velocity (Online Mode)" else "Velocity (Offline Mode)"
-                    bungeecord -> "Proxied" to when (bungeecordOnlineMode) {
-                        true -> "BungeeCord (Online Mode)"
-                        false -> "BungeeCord (Offline Mode)"
-                        null -> "BungeeCord (Unknown)"
-                    }
-
-                    else -> "Offline Mode" to "Standalone"
-                }
-
-                map[mode] = mapOf(details to 1)
-                map
-            }
-        }
+        map[mode] = mapOf(details to 1)
+        map
+      }
     }
+  }
 
-    @JvmStatic
-    fun shutdown() {
-        metrics?.shutdown()
-    }
+  @JvmStatic
+  fun shutdown() {
+    metrics?.shutdown()
+  }
 
-    fun addLineChart(name: String, callable: Callable<Int>) {
-        metrics?.addCustomChart(SingleLineChart(name, callable))
-    }
+  fun addLineChart(name: String, callable: Callable<Int>) {
+    metrics?.addCustomChart(SingleLineChart(name, callable))
+  }
 
-    fun addDrilldownPieChart(name: String, callable: Callable<Map<String, Map<String, Int>>>) {
-        metrics?.addCustomChart(DrilldownPie(name, callable))
-    }
+  fun addDrilldownPieChart(name: String, callable: Callable<Map<String, Map<String, Int>>>) {
+    metrics?.addCustomChart(DrilldownPie(name, callable))
+  }
 
-    fun addSimplePieChart(name: String, callable: Callable<String>) {
-        metrics?.addCustomChart(SimplePie(name, callable))
-    }
+  fun addSimplePieChart(name: String, callable: Callable<String>) {
+    metrics?.addCustomChart(SimplePie(name, callable))
+  }
 
-    fun buildMetricsInfo(plugin: Any?, versionGetter: Supplier<String>): Map<String, Map<String, Int>> {
-        val version = versionGetter.getOrNull() ?: "unknown"
-        val status = if (plugin == null) "absent" else "present"
+  fun buildMetricsInfo(plugin: Any?, versionGetter: Supplier<String>): Map<String, Map<String, Int>> {
+    val version = versionGetter.getOrNull() ?: "unknown"
+    val status = if (plugin == null) "absent" else "present"
 
-        return mapOf(
-            status to mapOf(version to 1)
-        )
-    }
+    return mapOf(
+      status to mapOf(version to 1)
+    )
+  }
 
-    private fun Supplier<String>.getOrNull(): String? = try {
-        this.get()
-    } catch (e: Exception) {
-        null
-    }
+  private fun Supplier<String>.getOrNull(): String? = try {
+    this.get()
+  } catch (e: Exception) {
+    null
+  }
 }

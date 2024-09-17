@@ -29,19 +29,19 @@ import dev.mizule.mserverlinks.core.model.ServerLinkType
 
 object LinkUtil {
 
-    @JvmStatic
-    fun toVelocityLink(serverLinkType: ServerLinkType?): ServerLink.Type? = when (serverLinkType) {
-        ServerLinkType.BUG_REPORT -> ServerLink.Type.BUG_REPORT
-        ServerLinkType.COMMUNITY_GUIDELINES -> ServerLink.Type.COMMUNITY_GUIDELINES
-        ServerLinkType.SUPPORT -> ServerLink.Type.SUPPORT
-        ServerLinkType.STATUS -> ServerLink.Type.STATUS
-        ServerLinkType.FEEDBACK -> ServerLink.Type.FEEDBACK
-        ServerLinkType.COMMUNITY -> ServerLink.Type.COMMUNITY
-        ServerLinkType.WEBSITE -> ServerLink.Type.WEBSITE
-        ServerLinkType.FORUMS -> ServerLink.Type.FORUMS
-        ServerLinkType.NEWS -> ServerLink.Type.NEWS
-        ServerLinkType.ANNOUNCEMENTS -> ServerLink.Type.ANNOUNCEMENTS
-        ServerLinkType.CUSTOM -> null
-        else -> null // throw IllegalArgumentException("Unknown ServerLinkType: ${serverLinkType.name}")
-    }
+  @JvmStatic
+  fun toVelocityLink(serverLinkType: ServerLinkType?): ServerLink.Type? = when (serverLinkType) {
+    ServerLinkType.BUG_REPORT -> ServerLink.Type.BUG_REPORT
+    ServerLinkType.COMMUNITY_GUIDELINES -> ServerLink.Type.COMMUNITY_GUIDELINES
+    ServerLinkType.SUPPORT -> ServerLink.Type.SUPPORT
+    ServerLinkType.STATUS -> ServerLink.Type.STATUS
+    ServerLinkType.FEEDBACK -> ServerLink.Type.FEEDBACK
+    ServerLinkType.COMMUNITY -> ServerLink.Type.COMMUNITY
+    ServerLinkType.WEBSITE -> ServerLink.Type.WEBSITE
+    ServerLinkType.FORUMS -> ServerLink.Type.FORUMS
+    ServerLinkType.NEWS -> ServerLink.Type.NEWS
+    ServerLinkType.ANNOUNCEMENTS -> ServerLink.Type.ANNOUNCEMENTS
+    ServerLinkType.CUSTOM -> null
+    else -> null // throw IllegalArgumentException("Unknown ServerLinkType: ${serverLinkType.name}")
+  }
 }

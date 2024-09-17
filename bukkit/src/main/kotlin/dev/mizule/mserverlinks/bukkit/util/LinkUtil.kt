@@ -29,19 +29,19 @@ import org.bukkit.ServerLinks
 
 object LinkUtil {
 
-    @JvmStatic
-    fun toBukkitLink(serverLinkType: ServerLinkType?): ServerLinks.Type? = when (serverLinkType) {
-        ServerLinkType.BUG_REPORT -> ServerLinks.Type.REPORT_BUG
-        ServerLinkType.COMMUNITY_GUIDELINES -> ServerLinks.Type.COMMUNITY_GUIDELINES
-        ServerLinkType.SUPPORT -> ServerLinks.Type.SUPPORT
-        ServerLinkType.STATUS -> ServerLinks.Type.STATUS
-        ServerLinkType.FEEDBACK -> ServerLinks.Type.FEEDBACK
-        ServerLinkType.COMMUNITY -> ServerLinks.Type.COMMUNITY
-        ServerLinkType.WEBSITE -> ServerLinks.Type.WEBSITE
-        ServerLinkType.FORUMS -> ServerLinks.Type.FORUMS
-        ServerLinkType.NEWS -> ServerLinks.Type.NEWS
-        ServerLinkType.ANNOUNCEMENTS -> ServerLinks.Type.ANNOUNCEMENTS
-        ServerLinkType.CUSTOM -> null
-        else -> null // throw IllegalArgumentException("Unknown ServerLinkType: ${serverLinkType.name}")
-    }
+  @JvmStatic
+  fun toBukkitLink(serverLinkType: ServerLinkType?): ServerLinks.Type? = when (serverLinkType) {
+    ServerLinkType.BUG_REPORT -> ServerLinks.Type.REPORT_BUG
+    ServerLinkType.COMMUNITY_GUIDELINES -> ServerLinks.Type.COMMUNITY_GUIDELINES
+    ServerLinkType.SUPPORT -> ServerLinks.Type.SUPPORT
+    ServerLinkType.STATUS -> ServerLinks.Type.STATUS
+    ServerLinkType.FEEDBACK -> ServerLinks.Type.FEEDBACK
+    ServerLinkType.COMMUNITY -> ServerLinks.Type.COMMUNITY
+    ServerLinkType.WEBSITE -> ServerLinks.Type.WEBSITE
+    ServerLinkType.FORUMS -> ServerLinks.Type.FORUMS
+    ServerLinkType.NEWS -> ServerLinks.Type.NEWS
+    ServerLinkType.ANNOUNCEMENTS -> ServerLinks.Type.ANNOUNCEMENTS
+    ServerLinkType.CUSTOM -> null
+    else -> null // throw IllegalArgumentException("Unknown ServerLinkType: ${serverLinkType.name}")
+  }
 }
