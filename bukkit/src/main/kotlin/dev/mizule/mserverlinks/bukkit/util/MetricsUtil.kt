@@ -67,6 +67,7 @@ object MetricsUtil {
                         false -> "BungeeCord (Offline Mode)"
                         null -> "BungeeCord (Unknown)"
                     }
+
                     else -> "Offline Mode" to "Standalone"
                 }
 

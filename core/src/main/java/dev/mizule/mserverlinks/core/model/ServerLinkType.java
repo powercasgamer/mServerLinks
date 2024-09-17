@@ -29,65 +29,65 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public class ServerLinkType {
 
-    public static final ServerLinkType BUG_REPORT = new ServerLinkType("BUG_REPORT", "REPORT_BUG");
-    public static final ServerLinkType COMMUNITY_GUIDELINES = new ServerLinkType("COMMUNITY_GUIDELINES");
-    public static final ServerLinkType SUPPORT = new ServerLinkType("SUPPORT");
-    public static final ServerLinkType STATUS = new ServerLinkType("STATUS");
-    public static final ServerLinkType FEEDBACK = new ServerLinkType("FEEDBACK");
-    public static final ServerLinkType COMMUNITY = new ServerLinkType("COMMUNITY");
-    public static final ServerLinkType WEBSITE = new ServerLinkType("WEBSITE");
-    public static final ServerLinkType FORUMS = new ServerLinkType("FORUMS");
-    public static final ServerLinkType NEWS = new ServerLinkType("NEWS");
-    public static final ServerLinkType ANNOUNCEMENTS = new ServerLinkType("ANNOUNCEMENTS");
-    public static final ServerLinkType CUSTOM = new ServerLinkType("CUSTOM");
+  public static final ServerLinkType BUG_REPORT = new ServerLinkType("BUG_REPORT", "REPORT_BUG");
+  public static final ServerLinkType COMMUNITY_GUIDELINES = new ServerLinkType("COMMUNITY_GUIDELINES");
+  public static final ServerLinkType SUPPORT = new ServerLinkType("SUPPORT");
+  public static final ServerLinkType STATUS = new ServerLinkType("STATUS");
+  public static final ServerLinkType FEEDBACK = new ServerLinkType("FEEDBACK");
+  public static final ServerLinkType COMMUNITY = new ServerLinkType("COMMUNITY");
+  public static final ServerLinkType WEBSITE = new ServerLinkType("WEBSITE");
+  public static final ServerLinkType FORUMS = new ServerLinkType("FORUMS");
+  public static final ServerLinkType NEWS = new ServerLinkType("NEWS");
+  public static final ServerLinkType ANNOUNCEMENTS = new ServerLinkType("ANNOUNCEMENTS");
+  public static final ServerLinkType CUSTOM = new ServerLinkType("CUSTOM");
 
-    private final String name;
-    private final String[] aliases;
+  private final String name;
+  private final String[] aliases;
 
-    private ServerLinkType(final String name, final String... aliases) {
-        this.name = name;
-        this.aliases = aliases != null ? aliases : new String[0];
-    }
+  private ServerLinkType(final String name, final String... aliases) {
+    this.name = name;
+    this.aliases = aliases != null ? aliases : new String[0];
+  }
 
-    public static ServerLinkType[] values() {
-        return new ServerLinkType[]{
-            BUG_REPORT,
-            COMMUNITY_GUIDELINES,
-            SUPPORT,
-            STATUS,
-            FEEDBACK,
-            COMMUNITY,
-            WEBSITE,
-            FORUMS,
-            NEWS,
-            ANNOUNCEMENTS
-        };
-    }
+  public static ServerLinkType[] values() {
+    return new ServerLinkType[]{
+        BUG_REPORT,
+        COMMUNITY_GUIDELINES,
+        SUPPORT,
+        STATUS,
+        FEEDBACK,
+        COMMUNITY,
+        WEBSITE,
+        FORUMS,
+        NEWS,
+        ANNOUNCEMENTS
+    };
+  }
 
-    public static ServerLinkType fromName(String name) {
-        for (ServerLinkType type : values()) {
-            if (type.getName().equalsIgnoreCase(name)) {
-                return type;
-            }
-            for (String alias : type.getAliases()) {
-                if (alias.equalsIgnoreCase(name)) {
-                    return type;
-                }
-            }
+  public static ServerLinkType fromName(String name) {
+    for (ServerLinkType type : values()) {
+      if (type.getName().equalsIgnoreCase(name)) {
+        return type;
+      }
+      for (String alias : type.getAliases()) {
+        if (alias.equalsIgnoreCase(name)) {
+          return type;
         }
-        throw new IllegalArgumentException("No type with name or alias " + name);
+      }
     }
+    throw new IllegalArgumentException("No type with name or alias " + name);
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String[] getAliases() {
-        return aliases;
-    }
+  public String[] getAliases() {
+    return aliases;
+  }
 
-    @Override
-    public String toString() {
-        return name;
-    }
+  @Override
+  public String toString() {
+    return name;
+  }
 }

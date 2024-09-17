@@ -34,18 +34,18 @@ import java.lang.reflect.Type;
 
 public class ServerLinkTypeSerializer implements TypeSerializer<ServerLinkType> {
 
-    @Override
-    public ServerLinkType deserialize(final Type type, final ConfigurationNode node) throws SerializationException {
-        return ServerLinkType.fromName(node.getString());
-    }
+  @Override
+  public ServerLinkType deserialize(final Type type, final ConfigurationNode node) throws SerializationException {
+    return ServerLinkType.fromName(node.getString());
+  }
 
-    @Override
-    public void serialize(final Type type, @Nullable final ServerLinkType obj, final ConfigurationNode node) throws
-        SerializationException {
-        if (obj == null) {
-            node.raw(null);
-        } else {
-            node.set(obj.getName());
-        }
+  @Override
+  public void serialize(final Type type, @Nullable final ServerLinkType obj, final ConfigurationNode node) throws
+      SerializationException {
+    if (obj == null) {
+      node.raw(null);
+    } else {
+      node.set(obj.getName());
     }
+  }
 }
