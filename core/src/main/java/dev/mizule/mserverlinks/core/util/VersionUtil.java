@@ -28,20 +28,20 @@ import dev.mizule.mserverlinks.core.Constants;
 
 public class VersionUtil {
 
-    public static boolean isDev() {
-        return Constants.VERSION.contains("-SNAPSHOT") || Constants.VERSION.contains("-DEV");
-    }
+  public static boolean isDev() {
+    return Constants.VERSION.contains("-SNAPSHOT") || Constants.VERSION.contains("-DEV");
+  }
 
-    public static boolean isFolia() {
-        return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-    }
+  public static boolean isFolia() {
+    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  }
 
-    public static boolean isPaper() {
-        return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists("io.papermc.paper.configuration.Configuration");
-    }
+  public static boolean isPaper() {
+    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
+        "io.papermc.paper.configuration.Configuration");
+  }
 
-    public static boolean isSpigot() {
-        return ClassUtil.exists("org.spigotmc.SpigotConfig");
-    }
-
+  public static boolean isSpigot() {
+    return ClassUtil.exists("org.spigotmc.SpigotConfig");
+  }
 }

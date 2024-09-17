@@ -41,7 +41,7 @@ public class mServerLinks extends JavaPlugin {
     private final mServerLinksBootstrapper bootstrapper;
 
     public mServerLinks(
-        mServerLinksBootstrapper bootstrapper
+        final mServerLinksBootstrapper bootstrapper
     ) {
         this.bootstrapper = bootstrapper;
         this.commandManager = bootstrapper.commandManager();

@@ -34,8 +34,8 @@ import org.spongepowered.configurate.objectmapping.meta.Setting
 @JvmRecord
 data class Config(
 
-    @Comment(
-        """Possible values Type:
+  @Comment(
+    """Possible values Type:
  - BUG_REPORT
  - COMMUNITY_GUIDELINES
  - SUPPORT
@@ -46,27 +46,27 @@ data class Config(
  - FORUMS
  - NEWS
  - ANNOUNCEMENTS"""
-    )
-    val links: Map<String, Link> = mapOf(
-        "example" to Link("<red>Example", "https://example.com"),
-        "bug" to Link("Report a Bug", "https://example.com", ServerLinkType.BUG_REPORT),
-    ),
+  )
+  val links: Map<String, Link> = mapOf(
+    "example" to Link("<red>Example", "https://example.com"),
+    "bug" to Link("Report a Bug", "https://example.com", ServerLinkType.BUG_REPORT),
+  ),
 
-    @Comment(
-        "Links that are only visible to players with the specified permission\nThis currently works but is not recommended" +
-            " to use due to Spigot's implementation of the event."
-    )
-    val playerLinks: Map<String, Link> = mapOf(
-        "staff-guide" to Link("Staff Guide", "https://example.com", permission = "mserverlinks.staff"),
-    ),
+  @Comment(
+    "Links that are only visible to players with the specified permission\nThis currently works but is not recommended" +
+      " to use due to Spigot's implementation of the event."
+  )
+  val playerLinks: Map<String, Link> = mapOf(
+    "staff-guide" to Link("Staff Guide", "https://example.com", permission = "mserverlinks.staff"),
+  ),
 
-    val updateChecker: Boolean = true,
-    @Setting(value = "bStats")
-    val bStats: Boolean = true,
+  val updateChecker: Boolean = true,
+  @Setting(value = "bStats")
+  val bStats: Boolean = true,
 
-    @Setting(value = ConfigurationContainer.VERSION_FIELD)
-    @Comment("The version of the configuration file\nDo not change this value\nThis is used for internal purposes")
-    val version: Int = Transformations.VERSION_LATEST,
+  @Setting(value = ConfigurationContainer.VERSION_FIELD)
+  @Comment("The version of the configuration file\nDo not change this value\nThis is used for internal purposes")
+  val version: Int = Transformations.VERSION_LATEST,
 )
 
 @ConfigSerializable

@@ -26,12 +26,12 @@ package dev.mizule.mserverlinks.core.util;
 
 public class ClassUtil {
 
-    public static boolean exists(final String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
+  public static boolean exists(final String className) {
+    try {
+      Class.forName(className);
+      return true;
+    } catch (ClassNotFoundException e) {
+      return false;
     }
+  }
 }

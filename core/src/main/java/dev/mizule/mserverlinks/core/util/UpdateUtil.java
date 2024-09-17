@@ -29,10 +29,11 @@ package dev.mizule.mserverlinks.core.util;
  * From Paper, contributed by Techcable Techcable@outlook.com in PaperMC/Paper/GH-65
  */
 public class UpdateUtil {
-    public static final int DISTANCE_ERROR = -1;
-    public static final int DISTANCE_UNKNOWN = -2;
 
-    public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
-        return -2;
-    }
+  public static final int DISTANCE_ERROR = -1;
+  public static final int DISTANCE_UNKNOWN = -2;
+
+  public static int fetchDistanceFromGitHub(final String repo, final String branch, final String hash) {
+    return -2;
+  }
 }

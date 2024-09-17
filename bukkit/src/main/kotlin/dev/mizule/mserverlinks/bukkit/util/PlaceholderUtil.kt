@@ -36,29 +36,29 @@ import org.bukkit.entity.Player
 
 object PlaceholderUtil {
 
-    fun tags(player: Player? = null): TagResolver {
-        val builder = TagResolver.builder()
+  fun tags(player: Player? = null): TagResolver {
+    val builder = TagResolver.builder()
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            builder.resolver(papiTag(player))
-        }
-        if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
-            builder.resolver(MiniPlaceholders.getGlobalPlaceholders())
-        }
-        return builder.build()
+    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+      builder.resolver(papiTag(player))
     }
-
-    fun papiTag(player: Player?): TagResolver = TagResolver.resolver(
-        "papi"
-    ) { argumentQueue: ArgumentQueue, context: Context ->
-        // Get the string placeholder that they want to use.
-        val papiPlaceholder = argumentQueue.popOr("papi tag requires an argument").value()
-
-        // Then get PAPI to parse the placeholder for the given player.
-        val parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, "%$papiPlaceholder%")
-
-        // We need to turn this ugly legacy string into a nice component.
-        val componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder)
-        Tag.selfClosingInserting(componentPlaceholder)
+    if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
+      builder.resolver(MiniPlaceholders.getGlobalPlaceholders())
     }
+    return builder.build()
+  }
+
+  fun papiTag(player: Player?): TagResolver = TagResolver.resolver(
+    "papi"
+  ) { argumentQueue: ArgumentQueue, context: Context ->
+    // Get the string placeholder that they want to use.
+    val papiPlaceholder = argumentQueue.popOr("papi tag requires an argument").value()
+
+    // Then get PAPI to parse the placeholder for the given player.
+    val parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, "%$papiPlaceholder%")
+
+    // We need to turn this ugly legacy string into a nice component.
+    val componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder)
+    Tag.selfClosingInserting(componentPlaceholder)
+  }
 }
