@@ -22,7 +22,7 @@ dependencies {
   runtimeDownloadOnlyApi(configurate("yaml", "4.2.0-SNAPSHOT"))
   runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
   runtimeDownloadOnlyApi(cloud("paper", "2.0.0-beta.8"))
-  runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.0.3")
+  runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.1.0")
   implementation(libs.papertrail)
   implementation(libs.desertwell) {
     exclude("org.json")
