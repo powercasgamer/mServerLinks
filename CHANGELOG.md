@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2024-10-02] # 0.1.10 & 0.1.11
+
+### Fixed
+- Config migration not working properly
+
 ## [2024-08-23] # 0.0.9
 
 ### Added
