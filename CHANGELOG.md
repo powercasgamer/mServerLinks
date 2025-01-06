@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2024-10-16] # 0.11.12
+## [2025-01-06] # 0.11.15
+
+### Changed
+- Skipped 0.1.11 through 0.1.14
 
 ### Added
 - API (Thanks to [lucko/LuckPerms](https://github.com/LuckPerms/LuckPerms) for the event api)
