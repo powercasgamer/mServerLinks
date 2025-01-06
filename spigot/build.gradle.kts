@@ -21,8 +21,8 @@ dependencies {
   }
   api(cloud("paper", "2.0.0-beta.8"))
   api("org.bstats:bstats-bukkit:3.1.0")
-  api(adventure("text-minimessage", "4.17.0"))
-  api(adventure("text-serializer-legacy", "4.17.0"))
+  api(adventure("text-minimessage", "4.18.0"))
+  api(adventure("text-serializer-legacy", "4.18.0"))
 }
 
 mizule {

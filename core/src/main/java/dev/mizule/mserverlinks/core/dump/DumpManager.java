@@ -44,15 +44,12 @@ public class DumpManager {
     this.gson = new GsonBuilder()
         .setPrettyPrinting()
         .create();
-
   }
 
   public CompletableFuture<URI> dump() {
     final JsonObject dump = new JsonObject();
     dump.add("plugin", pluginDump());
     dump.add("environment", environmentDump());
-
-    System.out.println(this.gson.toJson(dump));
 
     return this.client.sendAsync(
         HttpRequest.newBuilder()
@@ -84,7 +81,7 @@ public class DumpManager {
   }
 
   private JsonObject environmentDump() {
-    JsonObject envInfo = new JsonObject();
+    final JsonObject envInfo = new JsonObject();
     envInfo.addProperty("operatingSystemType", System.getProperty("os.name"));
     envInfo.addProperty("operatingSystemVersion", System.getProperty("os.version"));
     envInfo.addProperty("operatingSystemArchitecture", System.getProperty("os.arch"));

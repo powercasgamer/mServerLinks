@@ -14,8 +14,8 @@ plugins {
 
 dependencies {
   api(projects.mserverlinksCore)
-  compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
-  annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+  compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
+  annotationProcessor("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
   runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
   runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
   runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
@@ -48,8 +48,8 @@ mizule {
 applyJarMetadata("mserverlinks-velocity")
 
 mizuleVelocityPlatform {
-  this.version.set("3.3.0-SNAPSHOT")
-  this.commonPlugins.set(false)
+  this.version.set("3.4.0-SNAPSHOT")
+  this.commonPlugins.set(true)
 }
 
 afterEvaluate {
@@ -62,7 +62,7 @@ afterEvaluate {
       platforms {
         velocity {
           jar.set(tasks.named("copyJar", dev.mizule.mizulebuildlogic.task.FileCopyTask::class).get().destination)
-          platformVersions = listOf("3.3")
+          platformVersions = listOf("3.3", "3.4")
         }
       }
     }

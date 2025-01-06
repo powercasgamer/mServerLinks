@@ -25,10 +25,19 @@
 package dev.mizule.mserverlinks.api.link;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
 public record ServerLink(@Nullable Component displayName, URI uri, @Nullable ServerLinkType type) {
 
-}
+  @Override
+  public String toString() {
+    return "ServerLink{" +
+      "displayName=" + (displayName instanceof TextComponent textComponent ? textComponent.content() : displayName) +
+      ", uri=" + uri +
+      ", type=" + type +
+      '}';
+  }
+  }

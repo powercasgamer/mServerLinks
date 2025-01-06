@@ -13,8 +13,8 @@ dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.miniplaceholders)
   compileOnly(libs.bstats.bukkit)
-  compileOnly(adventure("text-minimessage", "4.17.0"))
-  compileOnly(adventure("text-serializer-legacy", "4.17.0"))
+  compileOnly(adventure("text-minimessage", "4.18.0"))
+  compileOnly(adventure("text-serializer-legacy", "4.18.0"))
   compileOnly(configurate("core", "4.2.0-SNAPSHOT"))
 }
 

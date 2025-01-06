@@ -34,32 +34,25 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginManager;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import dev.mizule.mserverlinks.api.event.user.UserSendLinksEvent;
-import dev.mizule.mserverlinks.api.link.ServerLink;
-import dev.mizule.mserverlinks.api.link.ServerLinkType;
 import dev.mizule.mserverlinks.api.mServerLinksProvider;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.api.ApiRegistrationUtil;
 import dev.mizule.mserverlinks.core.api.mServerLinksAPIProvider;
 import dev.mizule.mserverlinks.core.config.Config;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
-import dev.mizule.mserverlinks.core.dump.DumpManager;
 import dev.mizule.mserverlinks.core.task.UpdateTask;
 import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.velocity.commands.Commands;
 import dev.mizule.mserverlinks.velocity.links.LinksManager;
 import dev.mizule.mserverlinks.velocity.listener.LinkListener;
 import dev.mizule.mserverlinks.velocity.listener.UpdateListener;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import ninja.egg82.events.KyoriEvents;
 import org.bstats.velocity.Metrics;
 import xyz.jpenilla.gremlin.runtime.DependencyCache;
 import xyz.jpenilla.gremlin.runtime.DependencyResolver;
 import xyz.jpenilla.gremlin.runtime.DependencySet;
 import xyz.jpenilla.gremlin.runtime.platformsupport.VelocityClasspathAppender;
 
-import java.net.URI;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.logging.Logger;
@@ -142,32 +135,7 @@ public class mServerLinks {
     }
     ApiRegistrationUtil.registerProvider(mServerLinksProvider);
 
-
     new Commands(this);
-
-    new DumpManager().dump().whenComplete((uri, throwable) -> {
-      if (throwable != null) {
-        logger.error("An error occurred while creating a dump", throwable);
-      } else {
-        if (uri != null) {
-          logger.info("A dump has been created at {}", uri);
-        }
-      }
-    });
-
-    KyoriEvents.subscribe(mServerLinksProvider.eventBus(), UserSendLinksEvent.class).handler(e -> {
-      e.links().add(new ServerLink(Component.text("Link for1 " + e.user().username()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for2 " + e.user().uuid()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for3 " + e.user().username()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for4 " + e.user().uuid()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for5 " + e.user().username()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for6 " + e.user().uuid()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for7 " + e.user().username()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for8 " + e.user().uuid()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for9 " + e.user().username()), URI.create("https://docs.papermc.io"), null));
-      e.links().add(new ServerLink(Component.text("Link for10 " + e.user().uuid()), URI.create("https://docs.papermc.io"), null));
-      e.links().removeIf(link -> link.type() != null && link.type() == ServerLinkType.BUG_REPORT);
-    });
 
     this.eventManager.register(this, new LinkListener(this.linksManager, mServerLinksProvider));
   }

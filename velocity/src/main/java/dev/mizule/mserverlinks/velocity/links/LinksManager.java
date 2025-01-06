@@ -41,77 +41,84 @@ import java.util.Map;
 
 public class LinksManager {
 
-    private final mServerLinks plugin;
-    private final ComponentLogger logger;
-    private final List<ServerLink> links;
-    private final Map<String, ServerLink> playerLinks;
+  private final mServerLinks plugin;
+  private final ComponentLogger logger;
+  private final List<ServerLink> links;
+  private final Map<String, ServerLink> playerLinks;
 
-    public LinksManager(final mServerLinks plugin) {
-        this.plugin = plugin;
-        this.logger = plugin.logger();
-        this.links = new ArrayList<>();
-        this.playerLinks = new HashMap<>();
+  public LinksManager(final mServerLinks plugin) {
+    this.plugin = plugin;
+    this.logger = plugin.logger();
+    this.links = new ArrayList<>();
+    this.playerLinks = new HashMap<>();
+  }
+
+  public void unregisterLinks() {
+    for (final ServerLink link : new ArrayList<>(links)) {
+      final Component label = link.getCustomLabel()
+        .orElseGet(() -> link.getBuiltInType()
+          .map(type -> Component.text(type.name()))
+          .orElse(Component.text("unknown")));
+      logger.info(
+        "Unregistering link: {}",
+        label
+      );
+      links.remove(link);
     }
+  }
 
-    public void unregisterLinks() {
-        for (final ServerLink link : links) {
-            logger.info(
-                "Unregistering link: {}",
-                link.getCustomLabel().orElse(Component.text(link.getBuiltInType().orElseThrow().name()))
-            );
-        }
+  public void registerLinks() {
+    for (final Map.Entry<String, Link> entry : this.plugin.config().get().links().entrySet()) {
+      final String name = entry.getKey();
+      final Link link = entry.getValue();
+      final ServerLink.Type type = LinkUtil.toVelocityLink(link.type());
+
+      logger.info("Registering link: {}", name);
+
+      if (type == null) {
+        links.add(ServerLink.serverLink(MiniMessage.miniMessage().deserialize(link.name(), resolvers()), link.url()));
+      } else {
+        links.add(ServerLink.serverLink(type, link.url()));
+      }
     }
+  }
 
-    public void registerLinks() {
-        for (final Map.Entry<String, Link> entry : this.plugin.config().get().links().entrySet()) {
-            final String name = entry.getKey();
-            final Link link = entry.getValue();
-            final ServerLink.Type type = LinkUtil.toVelocityLink(link.type());
+  public void registerPlayerLinks() {
+    for (final Map.Entry<String, Link> entry : this.plugin.config().get().playerLinks().entrySet()) {
+      final String name = entry.getKey();
+      final Link link = entry.getValue();
+      final ServerLink.Type type = LinkUtil.toVelocityLink(link.type());
+      final String permission = link.permission();
 
-            logger.info("Registering link: {}", name);
+      logger.info("Registering player link: {}", name);
 
-            if (type == null) {
-                links.add(ServerLink.serverLink(MiniMessage.miniMessage().deserialize(link.name(), resolvers()), link.url()));
-            } else {
-                links.add(ServerLink.serverLink(type, link.url()));
-            }
-        }
+      if (type == null) {
+        playerLinks.put(
+          permission, ServerLink.serverLink(
+            MiniMessage.miniMessage().deserialize(link.name(), resolvers()),
+            link.url()
+          )
+        );
+      } else {
+        playerLinks.put(permission, ServerLink.serverLink(type, link.url()));
+      }
     }
+  }
 
-    public void registerPlayerLinks() {
-        for (final Map.Entry<String, Link> entry : this.plugin.config().get().playerLinks().entrySet()) {
-            final String name = entry.getKey();
-            final Link link = entry.getValue();
-            final ServerLink.Type type = LinkUtil.toVelocityLink(link.type());
-            final String permission = link.permission();
+  public List<ServerLink> links() {
+    return links;
+  }
 
-            logger.info("Registering player link: {}", name);
+  public Map<String, ServerLink> playerLinks() {
+    return playerLinks;
+  }
 
-            if (type == null) {
-                playerLinks.put(permission, ServerLink.serverLink(
-                    MiniMessage.miniMessage().deserialize(link.name(), resolvers()),
-                    link.url()
-                ));
-            } else {
-                playerLinks.put(permission, ServerLink.serverLink(type, link.url()));
-            }
-        }
+  private TagResolver resolvers() {
+    final TagResolver.Builder builder = TagResolver.builder();
+
+    if (plugin.proxy().getPluginManager().isLoaded("miniplaceholders")) {
+      builder.resolver(MiniPlaceholders.getGlobalPlaceholders());
     }
-
-    public List<ServerLink> links() {
-        return links;
-    }
-
-    public Map<String, ServerLink> playerLinks() {
-        return playerLinks;
-    }
-
-    private TagResolver resolvers() {
-        final TagResolver.Builder builder = TagResolver.builder();
-
-        if (plugin.proxy().getPluginManager().isLoaded("miniplaceholders")) {
-            builder.resolver(MiniPlaceholders.getGlobalPlaceholders());
-        }
-        return builder.build();
-    }
+    return builder.build();
+  }
 }

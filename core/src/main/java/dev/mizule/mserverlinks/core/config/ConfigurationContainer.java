@@ -100,13 +100,14 @@ public final class ConfigurationContainer<C> {
   public CompletableFuture<Boolean> reload() {
     return CompletableFuture.supplyAsync(() -> {
       try {
+        logger.info("Reloading {} configuration file", clazz.getSimpleName());
         final ConfigurationNode node = loader.load();
         C newConfig = node.get(clazz);
         node.set(clazz, newConfig);
         loader.save(node);
         config.set(newConfig);
         return true;
-      } catch (ConfigurateException exception) {
+      } catch (final ConfigurateException exception) {
         logger.error("Could not reload {} configuration file", clazz.getSimpleName(), exception);
         return false;
       }

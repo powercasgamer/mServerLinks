@@ -38,49 +38,56 @@ import org.incendo.cloud.setting.ManagerSetting;
 import org.incendo.cloud.velocity.CloudInjectionModule;
 import org.incendo.cloud.velocity.VelocityCommandManager;
 
+
 public class Commands {
 
-    private final mServerLinks plugin;
-    private final VelocityCommandManager<CommandSource> commandManager;
+  private final mServerLinks plugin;
+  private final VelocityCommandManager<CommandSource> commandManager;
 
-    public Commands(mServerLinks plugin) {
-        this.plugin = plugin;
+  public Commands(mServerLinks plugin) {
+    this.plugin = plugin;
 
-        final Injector childInjector = this.plugin.injector().createChildInjector(
-            new CloudInjectionModule<>(
-                CommandSource.class,
-                ExecutionCoordinator.simpleCoordinator(),
-                SenderMapper.identity()
-            )
-        );
-        final VelocityCommandManager<CommandSource> commandManager = childInjector.getInstance(
-            Key.get(new TypeLiteral<VelocityCommandManager<CommandSource>>() {
-            })
-        );
+    final Injector childInjector = this.plugin.injector().createChildInjector(
+      new CloudInjectionModule<>(
+        CommandSource.class,
+        ExecutionCoordinator.simpleCoordinator(),
+        SenderMapper.identity()
+      )
+    );
+    final VelocityCommandManager<CommandSource> commandManager = childInjector.getInstance(
+      Key.get(new TypeLiteral<VelocityCommandManager<CommandSource>>() {
+      })
+    );
 
-        this.commandManager = commandManager;
+    this.commandManager = commandManager;
 
-        commandManager.settings().set(ManagerSetting.ALLOW_UNSAFE_REGISTRATION, true);
-        commandManager.command(rootBuilder()
-            .literal("reload")
-            .permission(Permission.permission("mserverlinks.reload"))
-            .handler(ctx -> {
-                this.plugin.config().reload().thenAccept(success -> {
-                    if (success) {
-                        ctx.sender().sendRichMessage("Config reloaded!");
-                        ctx.sender().sendRichMessage("<i>Note: You need to relog for changes to take effect.");
-                    } else {
-                        ctx.sender().sendRichMessage("Config not reloaded :(");
-                    }
-                    this.plugin.linksManager().unregisterLinks();
-                    this.plugin.linksManager().registerLinks();
-                });
-            })
-        );
-    }
+    commandManager.settings().set(ManagerSetting.ALLOW_UNSAFE_REGISTRATION, true);
+    commandManager.command(rootBuilder()
+      .literal("reload")
+      .permission(Permission.permission("mserverlinks.reload"))
+      .handler(ctx -> {
+        ctx.sender().sendRichMessage("<blue>[mServerLinks] Reloading... this may take a few seconds.");
+        this.plugin.config().reload().whenComplete((success, throwable) -> {
+          if (throwable != null) {
+            plugin.logger().error("Failed to reload config", throwable);
+            return;
+          }
+          if (success) {
+            plugin.logger().info("unregistering links");
+            this.plugin.linksManager().unregisterLinks();
+            this.plugin.linksManager().registerLinks();
+            ctx.sender().sendRichMessage("Config reloaded!");
+            ctx.sender().sendRichMessage("<i>Note: You need to relog for changes to take effect.");
+          } else {
+            ctx.sender().sendRichMessage("Config not reloaded :(");
+          }
+        });
+      })
+    );
+  }
 
-    private Command.Builder<CommandSource> rootBuilder() {
-        return commandManager.commandBuilder("vmserverlinks", "vserverlinks")
-            .commandDescription(CommandDescription.commandDescription("Main command for mServerLinks"));
-    }
+  private Command.Builder<CommandSource> rootBuilder() {
+    return commandManager.commandBuilder("vmserverlinks", "vserverlinks")
+      .commandDescription(CommandDescription.commandDescription("Main command for mServerLinks"));
+  }
 }

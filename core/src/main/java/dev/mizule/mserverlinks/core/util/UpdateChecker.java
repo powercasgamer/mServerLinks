@@ -93,7 +93,6 @@ public final class UpdateChecker {
     }
 
     int rateLimitRemaining = Integer.parseInt(response.headers().firstValue("X-RateLimit-Remaining").orElse("0"));
-    System.out.println("ratelimit: " + rateLimitRemaining);
     if (rateLimitRemaining == 0) {
       long resetTime = response.headers().firstValueAsLong("X-RateLimit-Reset").orElse(0) * 1000;
       long currentTime = System.currentTimeMillis();
