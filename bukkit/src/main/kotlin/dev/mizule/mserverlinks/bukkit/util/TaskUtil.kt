@@ -22,29 +22,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.bukkit.util
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.util.VersionUtil
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask
+import org.bukkit.Bukkit
+import org.bukkit.plugin.Plugin
+import org.bukkit.scheduler.BukkitTask
+import java.util.concurrent.TimeUnit
 
-import java.util.Locale;
+object TaskUtil {
 
-public class VersionUtil {
-
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
-  }
-
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-  }
-
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
+  fun runTaskTimerAsync(
+    plugin: Plugin,
+    task: Runnable,
+    delay: Long = 0,
+    period: Long = 0,
+    unit: TimeUnit = TimeUnit.SECONDS
+  ): Task {
+    if (VersionUtil.isFolia()) {
+      return Task(Bukkit.getAsyncScheduler().runAtFixedRate(plugin, { scheduledTask -> task.run() }, delay, period, unit), null)
+    }
+    return Task(
+      null,
+      plugin.server.scheduler.runTaskTimerAsynchronously(
+        plugin,
+        task,
+        unit.toSeconds(delay) * 20,
+        unit.toSeconds
+          (period) * 20
+      )
+    )
   }
 }
+
+data class Task(val scheduledTask: ScheduledTask?, val bukkitTask: BukkitTask?)

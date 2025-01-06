@@ -22,29 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.task;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.util.UpdateChecker;
 
-import java.util.Locale;
+import java.util.List;
+import java.util.logging.Logger;
 
-public class VersionUtil {
+public class UpdateTask implements Runnable {
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+  private final Logger logger;
+  private final UpdateChecker updateChecker = new UpdateChecker();
+
+  public UpdateTask(Logger logger) {
+    this.logger = logger;
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  @Override
+  public void run() {
+    final List<String> update = updateChecker.checkVersion();
+
+    if (update.isEmpty()) {
+      logger.info("No updates available.");
+      return;
+    }
+
+    for (final String message : update) {
+      logger.info(message);
+    }
   }
 
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
 }

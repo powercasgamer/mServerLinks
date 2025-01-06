@@ -1,7 +1,8 @@
 [versions]
 # minecraft
 mizule = "0.1.22"
-minecraft = "1.21.1"
+gson = "2.11.0"
+minecraft = "1.21.3"
 hangar-publish = "0.1.2"
 desertwell = "2.0.4"
 mod-publish = "0.7.4"
@@ -10,8 +11,15 @@ slf4j = "2.0.16"
 bstats = "3.1.0"
 placeholderapi = "2.11.6"
 miniplaceholders = "2.2.3"
+event = "3.0.0"
+caffeine = "3.1.8"
+guava = "33.3.1-jre"
+eventchain = "4.0.0-v1-SNAPSHOT"
 
 [libraries]
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 papertrail = { module = "io.papermc:paper-trail", version.ref = "paper-trail" }
@@ -19,6 +27,8 @@ bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 bstats-velocity = { module = "org.bstats:bstats-velocity", version.ref = "bstats" }
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
 miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version.ref = "miniplaceholders" }
+event-api = { module = "net.kyori:event-api", version.ref = "event" }
+eventchain-kyori = { module = "dev.mizule.event-chain:event-chain-kyori", version.ref = "eventchain" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish" }

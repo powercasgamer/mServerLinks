@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2024-10-16] # 0.11.12
+
+### Added
+- API (Thanks to [lucko/LuckPerms](https://github.com/LuckPerms/LuckPerms) for the event api)
+- Version updater
+
 ## [2024-10-02] # 0.1.10 & 0.1.11
 
 ### Fixed

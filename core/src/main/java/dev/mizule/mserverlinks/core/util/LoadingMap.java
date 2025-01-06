@@ -24,27 +24,45 @@
  */
 package dev.mizule.mserverlinks.core.util;
 
-import dev.mizule.mserverlinks.core.Constants;
+import com.google.common.collect.ForwardingMap;
 
-import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
-public class VersionUtil {
-
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+public class LoadingMap<K, V> extends ForwardingMap<K, V> implements Map<K, V> {
+  public static <K, V> LoadingMap<K, V> of(Map<K, V> map, Function<K, V> function) {
+    return new LoadingMap<>(map, function);
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  public static <K, V> LoadingMap<K, V> of(Function<K, V> function) {
+    return of(new ConcurrentHashMap<>(), function);
   }
 
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
+  private final Map<K, V> map;
+  private final Function<K, V> function;
+
+  private LoadingMap(Map<K, V> map, Function<K, V> function) {
+    this.map = map;
+    this.function = function;
   }
 
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
+  @Override
+  protected Map<K, V> delegate() {
+    return this.map;
+  }
+
+  public V getIfPresent(K key) {
+    return this.map.get(key);
+  }
+
+  @Override
+  public V get(Object key) {
+    V value = this.map.get(key);
+    if (value != null) {
+      return value;
+    }
+    //noinspection unchecked
+    return this.map.computeIfAbsent((K) key, this.function);
   }
 }

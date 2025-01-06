@@ -22,29 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.api.event.user;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.event.mServerLinksEvent;
+import dev.mizule.mserverlinks.api.link.ServerLink;
+import dev.mizule.mserverlinks.api.mServerLinks;
+import dev.mizule.mserverlinks.api.user.User;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
+import java.util.List;
 
-public class VersionUtil {
+public record UserSendLinksEvent(User user, List<ServerLink> links) implements mServerLinksEvent {
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+  @Override
+  public @NotNull mServerLinks mServerLinks() {
+    return null;
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-  }
-
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
+  @Override
+  public @NotNull Class<? extends mServerLinksEvent> eventType() {
+    return UserSendLinksEvent.class;
   }
 }

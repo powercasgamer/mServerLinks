@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,13 @@ import com.velocitypowered.api.network.ProtocolState;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.util.ServerLink;
+import dev.mizule.mserverlinks.api.event.user.UserSendLinksEvent;
+import dev.mizule.mserverlinks.core.api.impl.ApiUser;
+import dev.mizule.mserverlinks.core.api.mServerLinksAPIProvider;
 import dev.mizule.mserverlinks.velocity.links.LinksManager;
+import dev.mizule.mserverlinks.velocity.util.LinkUtil;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import ninja.egg82.events.KyoriEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,39 +45,49 @@ import java.util.Map;
 
 public class LinkListener {
 
-    private final LinksManager linksManager;
+  private final LinksManager linksManager;
+  private final mServerLinksAPIProvider apiProvider;
 
-    private final ComponentLogger logger = ComponentLogger.logger();
+  private final ComponentLogger logger = ComponentLogger.logger();
 
-    public LinkListener(final LinksManager linksManager) {
-        this.linksManager = linksManager;
+  public LinkListener(final LinksManager linksManager, final mServerLinksAPIProvider apiProvider) {
+    this.linksManager = linksManager;
+    this.apiProvider = apiProvider;
+  }
+
+  @Subscribe
+  public void onPostLogin(final PostLoginEvent event) {
+    final Player player = event.getPlayer();
+    logger.debug("[PLE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
+    final ProtocolState protocolState = player.getProtocolState();
+    if (protocolState != ProtocolState.CONFIGURATION && protocolState != ProtocolState.PLAY) {
+      return;
+    }
+    final ProtocolVersion protocolVersion = player.getProtocolVersion();
+    if (!protocolVersion.noLessThan(ProtocolVersion.MINECRAFT_1_21)) {
+      return;
     }
 
-    @Subscribe
-    public void onPostLogin(final PostLoginEvent event) {
-        final Player player = event.getPlayer();
-        logger.debug("[PLE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
-        final ProtocolState protocolState = player.getProtocolState();
-        if (protocolState != ProtocolState.CONFIGURATION && protocolState != ProtocolState.PLAY) return;
-        final ProtocolVersion protocolVersion = player.getProtocolVersion();
-        if (!protocolVersion.noLessThan(ProtocolVersion.MINECRAFT_1_21)) return;
-        final List<ServerLink> serverLinks = this.linksManager.links();
-        final Map<String, ServerLink> playerLinks = this.linksManager.playerLinks();
+    final List<ServerLink> serverLinks = this.linksManager.links();
+    final Map<String, ServerLink> playerLinks = this.linksManager.playerLinks();
+    final List<ServerLink> allLinks = new ArrayList<>(serverLinks);
 
-        final List<ServerLink> allLinks = new ArrayList<>(serverLinks);
-
-        for (final Map.Entry<String, ServerLink> entry : playerLinks.entrySet()) {
-            if (player.hasPermission(entry.getKey())) {
-                allLinks.add(entry.getValue());
-            }
-        }
-        player.setServerLinks(allLinks);
+    for (final Map.Entry<String, ServerLink> entry : playerLinks.entrySet()) {
+      if (player.hasPermission(entry.getKey())) {
+        allLinks.add(entry.getValue());
+      }
     }
 
-    @Subscribe
-    public void confi(final PlayerEnterConfigurationEvent event) {
-        final Player player = event.player();
-        logger.debug("[PECE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
-    }
+    UserSendLinksEvent userSendLinksEvent = new UserSendLinksEvent(new ApiUser(player.getUniqueId(), player.getUsername()),
+      new ArrayList<>(allLinks.stream().map(LinkUtil::fromVelocity).toList()));
+    KyoriEvents.call(this.apiProvider.eventBus(), userSendLinksEvent);
 
+    player.setServerLinks(userSendLinksEvent.links().stream().map(LinkUtil::toVelocity).toList());
+  }
+
+  @Subscribe
+  public void confi(final PlayerEnterConfigurationEvent event) {
+    final Player player = event.player();
+    logger.debug("[PECE] Player: {} State: {}", player.getUsername(), player.getProtocolState());
+  }
 }

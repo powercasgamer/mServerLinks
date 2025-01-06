@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.CommandDescription;
@@ -95,6 +97,14 @@ public class mServerLinksBootstrapper implements PluginBootstrap {
             .permission(Permission.permission("mserverlinks.reload"))
             .handler(ctx -> {
                 this.config.reload().thenAccept(success -> {
+                  if (ctx.sender().getSender() instanceof Player player) {
+                    Bukkit.getScheduler().runTask(mServerLinks.getPlugin(mServerLinks.class), () -> {
+                      player.performCommand("/say test"); // no wor k
+                      player.performCommand("say test"); // no work
+                      player.performCommand("luckperms info"); // yes work
+//                      player.performCommand("/luckperms info"); // yes work
+                    });
+                  }
                     if (success) {
                         ctx.sender().getSender().sendRichMessage("Config reloaded!");
                         ctx.sender().getSender().sendRichMessage("<i>Note: You need to relog for changes to take effect.");

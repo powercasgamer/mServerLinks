@@ -22,29 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.dump
 
-import dev.mizule.mserverlinks.core.Constants;
+data class DumpData(val version: String, val server: ServerInfo, val plugins: Set<Plugin>,)
 
-import java.util.Locale;
+data class Plugin(val name: String, val version: String,)
 
-public class VersionUtil {
-
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
-  }
-
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-  }
-
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
-}
+data class ServerInfo(val brand: String, val version: String, val name: String,)

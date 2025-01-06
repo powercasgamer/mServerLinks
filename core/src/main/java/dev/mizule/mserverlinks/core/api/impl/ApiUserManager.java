@@ -22,29 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.api.impl;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.user.User;
+import dev.mizule.mserverlinks.api.user.UserManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
-public class VersionUtil {
+public class ApiUserManager implements UserManager {
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+  private final Map<UUID, User> users;
+
+  public ApiUserManager() {
+    this.users = new HashMap<>();
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  @Override
+  public @Nullable User user(final UUID uuid) {
+    return this.users.get(uuid);
   }
 
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
+  @Override
+  public @NotNull @Unmodifiable Set<User> users() {
+    return Set.copyOf(this.users.values());
   }
 }

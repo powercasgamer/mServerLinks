@@ -20,6 +20,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "mserverlinks-parent"
 
 sequenceOf(
+    "api",
     "core",
     "bukkit",
     "spigot",

@@ -6,6 +6,8 @@ public final class Constants {
     public static final String GIT_COMMIT = "{{ git_commit }}";
     public static final String GIT_TAG = "{{ git_tag }}";
     public static final String GIT_URL = "{{ git_url }}";
+    public static final String GIT_USER = "{{ git_user | default("powercasgamer") }}";
+    public static final String GIT_REPO = "{{ git_repo | default("mServerLinks") }}";
     public static final String AUTHOR = "{{ author }}";
     public static final String DESCRIPTION = "{{ description }}";
     public static final String NAME = "{{ name }}";

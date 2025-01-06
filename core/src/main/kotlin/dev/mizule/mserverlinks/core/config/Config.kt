@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
  */
 package dev.mizule.mserverlinks.core.config
 
+import dev.mizule.mserverlinks.api.link.ServerLinkType
 import dev.mizule.mserverlinks.core.config.transformations.Transformations
-import dev.mizule.mserverlinks.core.model.ServerLinkType
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment
 import org.spongepowered.configurate.objectmapping.meta.Setting
@@ -45,7 +45,11 @@ data class Config(
  - WEBSITE
  - FORUMS
  - NEWS
- - ANNOUNCEMENTS"""
+ - ANNOUNCEMENTS
+ - CUSTOM
+
+ Setting the type to CUSTOM will be the same as not setting it at all. You'll want to choose this for any custom links.
+ """
   )
   val links: Map<String, Link> = mapOf(
     "example" to Link("<red>Example", "https://example.com"),
@@ -53,8 +57,8 @@ data class Config(
   ),
 
   @Comment(
-    "Links that are only visible to players with the specified permission\nThis currently works but is not recommended" +
-      " to use due to Spigot's implementation of the event."
+    "Links that are only visible to players with the specified permission\n" +
+      "NOTE: This feature may or may not work all the time on Bukkit based servers (Paper, Spigot)"
   )
   val playerLinks: Map<String, Link> = mapOf(
     "staff-guide" to Link("Staff Guide", "https://example.com", permission = "mserverlinks.staff"),

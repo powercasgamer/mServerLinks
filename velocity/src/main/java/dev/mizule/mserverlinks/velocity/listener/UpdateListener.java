@@ -22,29 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.velocity.listener;
 
-import dev.mizule.mserverlinks.core.Constants;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.proxy.Player;
+import dev.mizule.mserverlinks.core.util.UpdateChecker;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 
-import java.util.Locale;
+import java.util.List;
 
-public class VersionUtil {
+public class UpdateListener {
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
-  }
+    @Subscribe
+    public void onPostLogin(final PostLoginEvent event) {
+        final Player player = event.getPlayer();
+        if (player.hasPermission("mserverlinks.update")) {
+          final List<String> notes = new UpdateChecker().checkVersion();
+          if (!notes.isEmpty()) {
+            for (String note : notes) {
+              player.sendRichMessage("<prefix> <message>",
+                  Placeholder.parsed("prefix", "<dark_gray>[<gradient:#f421ff:#00bbff>mServerLinks</gradient>]"),
+                  Placeholder.unparsed("message", note)
+              );
+            }
+          }
+        }
+    }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-  }
-
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
 }

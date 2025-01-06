@@ -2,6 +2,7 @@ import dev.mizule.mizulebuildlogic.MizuleExtension
 import dev.mizule.mizulebuildlogic.publish.MizulePublishExtension
 import dev.mizule.mizulebuildlogic.spotless.MizuleSpotlessExtension
 import dev.mizule.mizulebuildlogic.util.configureIndraJavaVersion
+import dev.mizule.mizulebuildlogic.util.sonatype
 import dev.mizule.mizulebuildlogic.util.versionString
 
 plugins {
@@ -25,12 +26,14 @@ subprojects {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://maven.mizule.dev/")
+    sonatype(1)
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io") {
       mavenContent {
         includeGroup("net.william278")
       }
     }
+    mavenLocal()
   }
 
   configureIndraJavaVersion(21)

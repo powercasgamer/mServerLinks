@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,13 @@
 package dev.mizule.mserverlinks.spigot;
 
 import dev.mizule.mserverlinks.bukkit.util.MetricsUtil;
+import dev.mizule.mserverlinks.bukkit.util.TaskUtil;
 import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.core.api.ApiRegistrationUtil;
+import dev.mizule.mserverlinks.core.api.mServerLinksAPIProvider;
 import dev.mizule.mserverlinks.core.config.Config;
 import dev.mizule.mserverlinks.core.config.ConfigurationContainer;
-import dev.mizule.mserverlinks.core.util.UpdateUtil;
+import dev.mizule.mserverlinks.core.task.UpdateTask;
 import dev.mizule.mserverlinks.core.util.VersionUtil;
 import dev.mizule.mserverlinks.spigot.links.LinksManager;
 import dev.mizule.mserverlinks.spigot.listener.LinkListener;
@@ -44,107 +47,104 @@ import org.incendo.cloud.permission.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 public class mServerLinks extends JavaPlugin {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(mServerLinks.class);
-    private LegacyPaperCommandManager<CommandSender> commandManager;
-    private ConfigurationContainer<Config> config;
-    private LinksManager linksManager;
-    public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
-        .character(LegacyComponentSerializer.SECTION_CHAR)
-        .hexColors()
-        .useUnusualXRepeatedCharacterHexFormat()
-        .build();
+  public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
+    .character(LegacyComponentSerializer.SECTION_CHAR)
+    .hexColors()
+    .useUnusualXRepeatedCharacterHexFormat()
+    .build();
+  private static final Logger LOGGER = LoggerFactory.getLogger(mServerLinks.class);
+  private mServerLinksAPIProvider mServerLinksProvider;
+  private LegacyPaperCommandManager<CommandSender> commandManager;
+  private ConfigurationContainer<Config> config;
+  private LinksManager linksManager;
 
-    @Override
-    public void onLoad() {
-        this.config = ConfigurationContainer.loadYaml(LOGGER, this.getDataFolder().toPath().resolve("config.yml"), Config.class);
-        this.linksManager = new LinksManager(this);
+  @Override
+  public void onLoad() {
+    this.config = ConfigurationContainer.loadYaml(LOGGER, this.getDataFolder().toPath().resolve("config.yml"), Config.class);
+    this.linksManager = new LinksManager(this);
+    this.mServerLinksProvider = new mServerLinksAPIProvider();
 
-        if (VersionUtil.isFolia()) {
-            getLogger().info("It appears you're using Folia, this platform has not been thoroughly tested with mServerLinks. " +
-                "Proceed with caution!");
-        }
-
-        if (VersionUtil.isPaper()) {
-            getLogger().info("It appears you're using Paper, please download the Paper jar from " + Constants.GIT_URL +
-                "/releases/latest");
-        }
+    if (VersionUtil.isFolia()) {
+      getLogger().info("It appears you're using Folia, this platform has not been thoroughly tested with mServerLinks. " +
+        "Proceed with caution!");
     }
 
-    @Override
-    public void onEnable() {
-        this.commandManager = LegacyPaperCommandManager.createNative(this, ExecutionCoordinator.simpleCoordinator());
-        getLogger().info("mServerLinks has been enabled!");
-        if (this.config.get().bStats()) {
-            getLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            MetricsUtil.init(this);
-        }
+    if (VersionUtil.isPaper()) {
+      getLogger().info("It appears you're using Paper, please download the Paper jar from " + Constants.GIT_URL +
+        "/releases/latest");
+    }
+  }
 
-        commands();
-
-        Bukkit.getPluginManager().registerEvents(new LinkListener(this), this);
-
-        this.linksManager.registerLinks();
+  @Override
+  public void onEnable() {
+    this.commandManager = LegacyPaperCommandManager.createNative(this, ExecutionCoordinator.simpleCoordinator());
+    getLogger().info("mServerLinks has been enabled!");
+    if (this.config.get().bStats()) {
+      getLogger().info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
+      MetricsUtil.init(this);
     }
 
-    @Override
-    public void onDisable() {
-        MetricsUtil.shutdown();
-        getLogger().info("mServerLinks has een disabled!");
+    if (this.config.get().updateChecker()) {
+      getLogger().info("UpdateChecker has been enabled, to disable it set 'update-checker' to false in the config!");
+      TaskUtil.INSTANCE.runTaskTimerAsync(this, new UpdateTask(this.getLogger()), 0, 3, TimeUnit.HOURS);
     }
 
-    private void checkUpdate() {
-        final int distance = UpdateUtil.fetchDistanceFromGitHub("powercasgamer/mServerLinks", Constants.GIT_BRANCH,
-            Constants.GIT_COMMIT
-        );
-        if (distance == UpdateUtil.DISTANCE_ERROR) {
-            getLogger().warning("Failed to check for updates!");
-            return;
-        } else if (distance == UpdateUtil.DISTANCE_UNKNOWN) {
-            getLogger().warning("Failed to check for updates!");
-            return;
-        }
+    commands();
 
-        if (distance > 0) {
-            getLogger().info("A new version of mServerLinks is available! (Distance: " + distance + ")");
-            getLogger().info("Download it at: " + Constants.GIT_URL + "/releases");
-        }
-    }
+    Bukkit.getPluginManager().registerEvents(new LinkListener(this), this);
 
-    private Command.Builder<CommandSender> rootBuilder() {
-        return commandManager.commandBuilder("mserverlinks", "serverlinks")
-            .commandDescription(CommandDescription.commandDescription("Main command for mServerLinks"));
-    }
+    this.linksManager.registerLinks();
+    ApiRegistrationUtil.registerProvider(mServerLinksProvider);
+  }
 
-    private void commands() {
-        this.commandManager.command(rootBuilder()
-            .literal("reload")
-            .permission(Permission.permission("mserverlinks.reload"))
-            .handler(ctx -> {
-                this.config.reload().thenAccept(success -> {
-                    if (success) {
-                        ctx.sender().sendMessage("Config reloaded!");
-                        ctx.sender().sendMessage("Note: You need to relog for changes to take effect.");
-                    } else {
-                        ctx.sender().sendMessage("Config not reloaded :(");
-                    }
-                    this.linksManager.unregisterLinks();
-                    this.linksManager.registerLinks();
-                });
-            })
-        );
-    }
+  public mServerLinksAPIProvider apiProvider() {
+    return mServerLinksProvider;
+  }
 
-    public LegacyPaperCommandManager<CommandSender> commandManager() {
-        return commandManager;
-    }
+  @Override
+  public void onDisable() {
+    MetricsUtil.shutdown();
+    ApiRegistrationUtil.unregisterProvider();
+    getLogger().info("mServerLinks has een disabled!");
+  }
 
-    public ConfigurationContainer<Config> config() {
-        return config;
-    }
+  private Command.Builder<CommandSender> rootBuilder() {
+    return commandManager.commandBuilder("mserverlinks", "serverlinks")
+      .commandDescription(CommandDescription.commandDescription("Main command for mServerLinks"));
+  }
 
-    public LinksManager linksManager() {
-        return linksManager;
-    }
+  private void commands() {
+    this.commandManager.command(rootBuilder()
+      .literal("reload")
+      .permission(Permission.permission("mserverlinks.reload"))
+      .handler(ctx -> {
+        this.config.reload().thenAccept(success -> {
+          if (success) {
+            ctx.sender().sendMessage("Config reloaded!");
+            ctx.sender().sendMessage("Note: You need to relog for changes to take effect.");
+          } else {
+            ctx.sender().sendMessage("Config not reloaded :(");
+          }
+          this.linksManager.unregisterLinks();
+          this.linksManager.registerLinks();
+        });
+      })
+    );
+  }
+
+  public LegacyPaperCommandManager<CommandSender> commandManager() {
+    return commandManager;
+  }
+
+  public ConfigurationContainer<Config> config() {
+    return config;
+  }
+
+  public LinksManager linksManager() {
+    return linksManager;
+  }
 }

@@ -22,29 +22,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.api.impl;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.user.User;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
+import java.util.UUID;
 
-public class VersionUtil {
+public class ApiUser implements User {
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+  private final UUID uuid;
+  private final String username;
+//  private Set<ServerLink> links;
+
+  public ApiUser(final UUID uuid, final String username) {
+    this.uuid = uuid;
+    this.username = username;
+//    this.links = links;
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  @Override
+  public @NotNull UUID uuid() {
+    return this.uuid;
   }
 
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
+  @Override
+  public @NotNull String username() {
+    return this.username;
   }
 
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
+//  @Override
+//  public @NotNull Set<ServerLink> links() {
+//    return this.links;
+//  }
+//
+//  @Override
+//  public void links(final Set<ServerLink> links) {
+//    this.links = links;
+//  }
 }

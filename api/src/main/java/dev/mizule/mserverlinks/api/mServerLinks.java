@@ -22,29 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.api;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.event.mServerLinksEvent;
+import dev.mizule.mserverlinks.api.user.UserManager;
+import net.kyori.event.EventBus;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
+public interface mServerLinks {
 
-public class VersionUtil {
+  @NotNull UserManager userManager();
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
-  }
-
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-  }
-
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
+  @NotNull EventBus<mServerLinksEvent> eventBus();
 }

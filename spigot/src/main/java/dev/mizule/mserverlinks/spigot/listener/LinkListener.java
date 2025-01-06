@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,14 @@
  */
 package dev.mizule.mserverlinks.spigot.listener;
 
+import dev.mizule.mserverlinks.api.event.user.UserSendLinksEvent;
+import dev.mizule.mserverlinks.api.link.ServerLink;
 import dev.mizule.mserverlinks.bukkit.util.LinkUtil;
+import dev.mizule.mserverlinks.core.api.impl.ApiUser;
 import dev.mizule.mserverlinks.core.config.Link;
 import dev.mizule.mserverlinks.spigot.mServerLinks;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import ninja.egg82.events.KyoriEvents;
 import org.bukkit.ServerLinks;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,37 +39,67 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LinkListener implements Listener {
 
-    private final mServerLinks bootstrapper;
+  private final mServerLinks bootstrapper;
 
-    public LinkListener(final mServerLinks bootstrapper) {
-        this.bootstrapper = bootstrapper;
-    }
+  public LinkListener(final mServerLinks bootstrapper) {
+    this.bootstrapper = bootstrapper;
+  }
 
-    @EventHandler
-    public void someEvent(final PlayerLinksSendEvent event) {
-        final Player player = event.getPlayer();
-        final ServerLinks serverLinks = event.getLinks();
-        for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().playerLinks().entrySet()) {
-            final String name = entry.getKey();
-            final Link link = entry.getValue();
-            final String permission = link.permission();
-            final ServerLinks.Type type = LinkUtil.toBukkitLink(link.type());
-            final URI uri = URI.create(link.url());
+  @EventHandler
+  public void someEvent(final PlayerLinksSendEvent event) {
+    final Player player = event.getPlayer();
+    final ServerLinks serverLinks = event.getLinks();
 
-            if (link.permission() != null && player.hasPermission(permission)) {
-                if (type == null) {
-                    serverLinks.addLink(
-                        mServerLinks.LEGACY_SERIALIZER.serialize(MiniMessage.miniMessage().deserialize(link.name())),
-                        uri
-                    );
-                } else {
-                    serverLinks.addLink(type, uri);
-                }
-            }
+    final Map<String, ServerLink> playerLinks = new HashMap<>();
+
+    for (final Map.Entry<String, Link> entry : this.bootstrapper.config().get().playerLinks().entrySet()) {
+      final String name = entry.getKey();
+      final Link link = entry.getValue();
+      final String permission = link.permission();
+      final ServerLinks.Type type = LinkUtil.toBukkitLink(link.type());
+      final URI uri = URI.create(link.url());
+
+      if (link.permission() != null && player.hasPermission(permission)) {
+        if (type == null) {
+          playerLinks.put(
+            name,
+            new ServerLink(
+              MiniMessage.miniMessage().deserialize(link.name()),
+              uri,
+              null
+            )
+          );
+        } else {
+          playerLinks.put(
+            name,
+            new ServerLink(
+              MiniMessage.miniMessage().deserialize(link.name()),
+              uri,
+              LinkUtil.fromBukkitLink(type)
+            )
+          );
         }
+      }
     }
+
+    UserSendLinksEvent userSendLinksEvent = new UserSendLinksEvent(
+      new ApiUser(player.getUniqueId(), player.getName()),
+      new ArrayList<>(playerLinks.values())
+    );
+    KyoriEvents.call(this.bootstrapper.apiProvider().eventBus(), userSendLinksEvent);
+
+    for (final ServerLink link : userSendLinksEvent.links()) {
+      if (link.type() == null) {
+        serverLinks.addLink(mServerLinks.LEGACY_SERIALIZER.serialize(link.displayName()), link.uri());
+      } else {
+        serverLinks.addLink(LinkUtil.toBukkitLink(link.type()), link.uri());
+      }
+    }
+  }
 }

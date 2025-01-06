@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.model;
+package dev.mizule.mserverlinks.api.link;
 
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-
-@ConfigSerializable
 public class ServerLinkType {
 
   public static final ServerLinkType BUG_REPORT = new ServerLinkType("BUG_REPORT", "REPORT_BUG");

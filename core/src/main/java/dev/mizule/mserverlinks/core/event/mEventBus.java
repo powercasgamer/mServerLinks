@@ -22,29 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.event;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.event.mServerLinksEvent;
+import net.kyori.event.EventSubscriber;
+import net.kyori.event.SimpleEventBus;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Locale;
 
-public class VersionUtil {
+public class mEventBus extends SimpleEventBus<mServerLinksEvent> {
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+  public mEventBus() {
+    super(mServerLinksEvent.class);
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
-  }
-
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
-  }
-
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
+  @Override
+  protected boolean shouldPost(@NonNull mServerLinksEvent event, @NonNull EventSubscriber<?> subscriber) {
+    return true;
   }
 }

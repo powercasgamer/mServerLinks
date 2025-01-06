@@ -22,29 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.api;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.event.mServerLinksEvent;
+import dev.mizule.mserverlinks.api.mServerLinks;
+import dev.mizule.mserverlinks.api.user.UserManager;
+import dev.mizule.mserverlinks.core.api.impl.ApiUserManager;
+import dev.mizule.mserverlinks.core.event.mEventBus;
+import net.kyori.event.EventBus;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
+public class mServerLinksAPIProvider implements mServerLinks {
 
-public class VersionUtil {
+  private final UserManager userManager;
+  private final mEventBus eventBus;
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+  public mServerLinksAPIProvider() {
+    this.userManager = new ApiUserManager();
+    this.eventBus = new mEventBus();
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  @Override
+  public @NotNull UserManager userManager() {
+    return this.userManager;
   }
 
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
+  @Override
+  public @NotNull EventBus<mServerLinksEvent> eventBus() {
+    return this.eventBus;
   }
 
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
 }

@@ -66,7 +66,7 @@ applyJarMetadata("mserverlinks-paper")
 
 mizulePaperPlatform {
   this.version.set(libs.versions.minecraft.get())
-  this.commonPlugins.set(false)
+  this.commonPlugins.set(true)
   this.extraPlugins.add(
     "https://ci.extendedclip.com/job/PlaceholderAPI/lastSuccessfulBuild/artifact/build/libs/PlaceholderAPI-2.11.7-DEV-200.jar"
   )

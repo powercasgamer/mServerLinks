@@ -22,29 +22,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.mizule.mserverlinks.core.util;
+package dev.mizule.mserverlinks.core.api;
 
-import dev.mizule.mserverlinks.core.Constants;
+import dev.mizule.mserverlinks.api.mServerLinks;
+import dev.mizule.mserverlinks.api.mServerLinksProvider;
 
-import java.util.Locale;
+import java.lang.reflect.Method;
 
-public class VersionUtil {
+public class ApiRegistrationUtil {
+  private static final Method REGISTER;
+  private static final Method UNREGISTER;
+  static {
+    try {
+      REGISTER = mServerLinksProvider.class.getDeclaredMethod("register", mServerLinks.class);
+      REGISTER.setAccessible(true);
 
-  public static boolean isDev() {
-    final String version = Constants.VERSION.toLowerCase(Locale.ROOT);
-    return version.contains("-snapshot") || version.contains("-dev");
+      UNREGISTER = mServerLinksProvider.class.getDeclaredMethod("unregister");
+      UNREGISTER.setAccessible(true);
+    } catch (NoSuchMethodException e) {
+      throw new ExceptionInInitializerError(e);
+    }
   }
 
-  public static boolean isFolia() {
-    return ClassUtil.exists("io.papermc.paper.threadedregions.RegionizedServer");
+  public static void registerProvider(mServerLinks mServerLinks) {
+    try {
+      REGISTER.invoke(null, mServerLinks);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
-  public static boolean isPaper() {
-    return ClassUtil.exists("com.destroystokyo.paper.PaperConfig") || ClassUtil.exists(
-        "io.papermc.paper.configuration.Configuration");
+  public static void unregisterProvider() {
+    try {
+      UNREGISTER.invoke(null);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
-  public static boolean isSpigot() {
-    return ClassUtil.exists("org.spigotmc.SpigotConfig");
-  }
 }
