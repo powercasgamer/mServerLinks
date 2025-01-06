@@ -33,8 +33,6 @@ subprojects {
         includeGroup("net.william278")
       }
     }
-    maven("https://repo.opencollab.dev/main/")
-    mavenLocal()
   }
 
   configureIndraJavaVersion(21)

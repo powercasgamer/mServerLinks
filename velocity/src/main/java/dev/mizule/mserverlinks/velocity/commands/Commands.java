@@ -38,7 +38,6 @@ import org.incendo.cloud.setting.ManagerSetting;
 import org.incendo.cloud.velocity.CloudInjectionModule;
 import org.incendo.cloud.velocity.VelocityCommandManager;
 
-
 public class Commands {
 
   private final mServerLinks plugin;
