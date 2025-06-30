@@ -19,7 +19,7 @@ dependencies {
   runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
   runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
   runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
-  runtimeDownloadOnlyApi(cloud("velocity", "2.0.0-beta.8"))
+  runtimeDownloadOnlyApi(cloud("velocity", "2.0.0-SNAPSHOT"))
   implementation(libs.bstats.velocity)
   compileOnly(libs.miniplaceholders)
 }
@@ -48,7 +48,7 @@ mizule {
 applyJarMetadata("mserverlinks-velocity")
 
 mizuleVelocityPlatform {
-  this.version.set("3.3.0-SNAPSHOT")
+  this.version.set("3.4.0-SNAPSHOT")
   this.commonPlugins.set(false)
 }
 

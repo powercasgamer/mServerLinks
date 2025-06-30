@@ -1,7 +1,7 @@
 [versions]
 # minecraft
-mizule = "0.1.22"
-minecraft = "1.21.1"
+mizule = "0.1.72"
+minecraft = "1.21.6"
 hangar-publish = "0.1.3"
 desertwell = "2.0.4"
 mod-publish = "0.8.4"

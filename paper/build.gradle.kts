@@ -21,7 +21,7 @@ dependencies {
   runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
   runtimeDownloadOnlyApi(configurate("yaml", "4.2.0-SNAPSHOT"))
   runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
-  runtimeDownloadOnlyApi(cloud("paper", "2.0.0-beta.8"))
+  runtimeDownloadOnlyApi(cloud("paper", "2.0.0-SNAPSHOT"))
   runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.1.0")
   implementation(libs.papertrail)
   implementation(libs.desertwell) {
@@ -68,7 +68,7 @@ mizulePaperPlatform {
   this.version.set(libs.versions.minecraft.get())
   this.commonPlugins.set(false)
   this.extraPlugins.add(
-    "https://ci.extendedclip.com/job/PlaceholderAPI/lastSuccessfulBuild/artifact/build/libs/PlaceholderAPI-2.11.7-DEV-200.jar"
+    "https://ci.extendedclip.com/job/PlaceholderAPI/lastSuccessfulBuild/artifact/build/libs/PlaceholderAPI-2.11.7-DEV-208.jar"
   )
 }
 
@@ -97,7 +97,7 @@ afterEvaluate {
     modrinth {
       accessToken = providers.environmentVariable("MODRINTH_API_KEY")
       projectId = "5E2WANwL"
-      minecraftVersions.addAll("1.21", "1.21.1")
+      minecraftVersions.addAll("1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6")
     }
 
     discord {

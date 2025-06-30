@@ -23,15 +23,17 @@ subprojects {
 
   repositories {
     mavenCentral()
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://maven.mizule.dev/")
+    maven("https://repo.mizule.dev/testing")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io") {
       mavenContent {
         includeGroup("net.william278")
       }
     }
-  }
+}
 
   configureIndraJavaVersion(21)
 

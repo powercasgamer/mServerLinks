@@ -46,6 +46,7 @@ import org.bstats.velocity.Metrics;
 import xyz.jpenilla.gremlin.runtime.DependencyCache;
 import xyz.jpenilla.gremlin.runtime.DependencyResolver;
 import xyz.jpenilla.gremlin.runtime.DependencySet;
+import xyz.jpenilla.gremlin.runtime.logging.Slf4jGremlinLogger;
 import xyz.jpenilla.gremlin.runtime.platformsupport.VelocityClasspathAppender;
 
 import java.nio.file.Path;
@@ -60,106 +61,106 @@ import java.nio.file.Path;
 )
 public class mServerLinks {
 
-    private final Path dataDirectory;
-    private final ComponentLogger logger;
-    private final PluginManager pluginManager;
-    private final EventManager eventManager;
-    private final ProxyServer proxy;
-    private final Metrics.Factory metricsFactory;
-    private final Injector injector;
-    private ConfigurationContainer<Config> config;
-    private LinksManager linksManager;
+  private final Path dataDirectory;
+  private final ComponentLogger logger;
+  private final PluginManager pluginManager;
+  private final EventManager eventManager;
+  private final ProxyServer proxy;
+  private final Metrics.Factory metricsFactory;
+  private final Injector injector;
+  private ConfigurationContainer<Config> config;
+  private LinksManager linksManager;
 
-    @Inject
-    public mServerLinks(
-        ProxyServer proxy, ComponentLogger logger, final @DataDirectory Path datDirectory,
-        final PluginManager pluginManager, final EventManager eventManager,
-        final Metrics.Factory metricsFactory, final Injector injector
-    ) {
-        this.proxy = proxy;
-        this.logger = logger;
-        this.dataDirectory = datDirectory;
-        this.eventManager = eventManager;
-        this.pluginManager = pluginManager;
-        this.metricsFactory = metricsFactory;
-        this.injector = injector;
+  @Inject
+  public mServerLinks(
+      ProxyServer proxy, ComponentLogger logger, final @DataDirectory Path datDirectory,
+      final PluginManager pluginManager, final EventManager eventManager,
+      final Metrics.Factory metricsFactory, final Injector injector
+  ) {
+    this.proxy = proxy;
+    this.logger = logger;
+    this.dataDirectory = datDirectory;
+    this.eventManager = eventManager;
+    this.pluginManager = pluginManager;
+    this.metricsFactory = metricsFactory;
+    this.injector = injector;
+  }
+
+  @Subscribe
+  public void onProxyInitialization(final ProxyInitializeEvent event) {
+    dependencies();
+    logger.warn("""
+
+        =======================================================================================================
+
+        This plugin will not work properly if you have it installed on both your backend and the proxy.
+        Please only install it on your proxy OR your backend, not both.
+        If you run into any issues with both installed, you will not receive support.
+
+        =======================================================================================================
+        """);
+
+    this.config = ConfigurationContainer.load(
+        logger,
+        dataDirectory.resolve("config.conf"),
+        Config.class
+    );
+    this.linksManager = new LinksManager(this);
+    this.linksManager.registerLinks();
+    this.linksManager.registerPlayerLinks();
+
+    if (this.config().get().bStats()) {
+      logger.info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
+      if (!VersionUtil.isDev()) {
+        final Metrics metrics = this.metricsFactory.make(this, 22401);
+      } else {
+        logger.warn("You are running a development build of mServerLinks, metrics are disabled!");
+      }
     }
 
-    @Subscribe
-    public void onProxyInitialization(final ProxyInitializeEvent event) {
-        dependencies();
-        logger.warn("""
+    new Commands(this);
 
-            =======================================================================================================
+    this.eventManager.register(this, new LinkListener(this.linksManager));
+  }
 
-            This plugin will not work properly if you have it installed on both your backend and the proxy.
-            Please only install it on your proxy OR your backend, not both.
-            If you run into any issues with both installed, you will not receive support.
-
-            =======================================================================================================
-            """);
-
-        this.config = ConfigurationContainer.load(
-            logger,
-            dataDirectory.resolve("config.conf"),
-            Config.class
-        );
-        this.linksManager = new LinksManager(this);
-        this.linksManager.registerLinks();
-        this.linksManager.registerPlayerLinks();
-
-        if (this.config().get().bStats()) {
-            logger.info("bStats has been enabled, to disable it set 'bStats' to false in the config!");
-            if (!VersionUtil.isDev()) {
-                final Metrics metrics = this.metricsFactory.make(this, 22401);
-            } else {
-                logger.warn("You are running a development build of mServerLinks, metrics are disabled!");
-            }
-        }
-
-        new Commands(this);
-
-        this.eventManager.register(this, new LinkListener(this.linksManager));
+  private void dependencies() {
+    final DependencySet deps = DependencySet.readDefault(this.getClass().getClassLoader());
+    final DependencyCache cache = new DependencyCache(this.dataDirectory.resolve("libraries"));
+    try (final DependencyResolver downloader = new DependencyResolver(new Slf4jGremlinLogger(logger))) {
+      new VelocityClasspathAppender(this.proxy, this).append(downloader.resolve(deps, cache).jarFiles());
     }
+    cache.cleanup();
+  }
 
-    private void dependencies() {
-        final DependencySet deps = DependencySet.readDefault(this.getClass().getClassLoader());
-        final DependencyCache cache = new DependencyCache(this.dataDirectory.resolve("libraries"));
-        try (final DependencyResolver downloader = new DependencyResolver(logger)) {
-            new VelocityClasspathAppender(this.proxy, this).append(downloader.resolve(deps, cache).jarFiles());
-        }
-        cache.cleanup();
-    }
+  public Path dataDirectory() {
+    return dataDirectory;
+  }
 
-    public Path dataDirectory() {
-        return dataDirectory;
-    }
+  public ComponentLogger logger() {
+    return logger;
+  }
 
-    public ComponentLogger logger() {
-        return logger;
-    }
+  public ConfigurationContainer<Config> config() {
+    return config;
+  }
 
-    public ConfigurationContainer<Config> config() {
-        return config;
-    }
+  public ProxyServer proxy() {
+    return proxy;
+  }
 
-    public ProxyServer proxy() {
-        return proxy;
-    }
+  public Injector injector() {
+    return injector;
+  }
 
-    public Injector injector() {
-        return injector;
-    }
+  public LinksManager linksManager() {
+    return linksManager;
+  }
 
-    public LinksManager linksManager() {
-        return linksManager;
-    }
+  public EventManager eventManager() {
+    return eventManager;
+  }
 
-    public EventManager eventManager() {
-        return eventManager;
-    }
-
-    public PluginManager pluginManager() {
-        return pluginManager;
-    }
+  public PluginManager pluginManager() {
+    return pluginManager;
+  }
 }

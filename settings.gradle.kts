@@ -3,11 +3,12 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
     maven("https://repo.stellardrift.ca/repository/snapshots/")
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://repo.mizule.dev/testing")
     maven("https://repo.mizule.dev/releases")
     maven("https://repo.mizule.dev/snapshots")
     maven("https://repo.jpenilla.xyz/snapshots")
-//    mavenLocal()
   }
 }
 
@@ -22,7 +23,7 @@ rootProject.name = "mserverlinks-parent"
 sequenceOf(
     "core",
     "bukkit",
-    "spigot",
+//    "spigot",
     "paper",
     "velocity",
 ).forEach {

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+### [2025-06-30] # 0.1.12
+
+### Fixed
+- Paper 1.21.6+ compatibility issues
+
 ## [2024-10-02] # 0.1.10 & 0.1.11
 
 ### Fixed

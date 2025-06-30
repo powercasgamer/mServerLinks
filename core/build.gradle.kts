@@ -11,7 +11,7 @@ dependencies {
   compileOnly(configurate("hocon", "4.2.0-SNAPSHOT"))
   compileOnly(configurate("yaml", "4.2.0-SNAPSHOT"))
   compileOnly(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
-  compileOnly(adventure("api", "4.17.0"))
+  compileOnly(adventure("api", "4.23.0"))
   compileOnly(libs.slf4j)
 }
 
