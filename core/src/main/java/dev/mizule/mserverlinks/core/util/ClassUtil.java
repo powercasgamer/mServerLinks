@@ -1,8 +1,8 @@
 /*
  * This file is part of mServerLinks, licensed under the MIT License.
  *
- * Copyright (c) 2024 powercas_gamer
- * Copyright (c) 2024 contributors
+ * Copyright (c) 2024-2025 powercas_gamer
+ * Copyright (c) 2024-2025 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
