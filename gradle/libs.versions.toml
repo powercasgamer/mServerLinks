@@ -2,9 +2,9 @@
 # minecraft
 mizule = "0.1.22"
 minecraft = "1.21.1"
-hangar-publish = "0.1.2"
+hangar-publish = "0.1.3"
 desertwell = "2.0.4"
-mod-publish = "0.7.4"
+mod-publish = "0.8.4"
 paper-trail = "1.0.1"
 slf4j = "2.0.16"
 bstats = "3.1.0"
