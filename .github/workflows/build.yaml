@@ -65,7 +65,7 @@ jobs:
             ${{ runner.os }}-project-local-gradle-caches-
 
       - name: Build with Gradle
-        run: ./gradlew build --scan
+        run: ./gradlew build copyJar --scan
 
       - name: Upload build reports
         uses: actions/upload-artifact@v4
