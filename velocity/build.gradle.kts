@@ -14,11 +14,11 @@ plugins {
 
 dependencies {
   api(projects.mserverlinksCore)
-  compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
-  annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+  compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
+  annotationProcessor("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
   runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
-  runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
-  runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
+  runtimeDownloadOnlyApi(configurate("hocon", libs.versions.configurate))
+  runtimeDownloadOnlyApi(configurate("extra-kotlin", libs.versions.configurate))
   runtimeDownloadOnlyApi(cloud("velocity", "2.0.0-SNAPSHOT"))
   implementation(libs.bstats.velocity)
   compileOnly(libs.miniplaceholders)

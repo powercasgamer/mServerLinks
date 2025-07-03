@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ### [2025-06-30] # 0.1.12
 
+**This is the final release for Minecraft 1.21.6 and below.**
+
 ### Fixed
 - Paper 1.21.6+ compatibility issues
 

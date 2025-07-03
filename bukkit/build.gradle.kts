@@ -13,9 +13,9 @@ dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.miniplaceholders)
   compileOnly(libs.bstats.bukkit)
-  compileOnly(adventure("text-minimessage", "4.23.0"))
-  compileOnly(adventure("text-serializer-legacy", "4.23.0"))
-  compileOnly(configurate("core", "4.2.0-SNAPSHOT"))
+  compileOnly(adventure("text-minimessage", libs.versions.adventure))
+  compileOnly(adventure("text-serializer-legacy", libs.versions.adventure))
+  compileOnly(configurate("core", libs.versions.configurate))
 }
 
 mizule {

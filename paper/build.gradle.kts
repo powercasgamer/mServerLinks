@@ -18,9 +18,9 @@ dependencies {
   api(projects.mserverlinksBukkit)
   compileOnly(paper(libs.versions.minecraft.get()))
   runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
-  runtimeDownloadOnlyApi(configurate("hocon", "4.2.0-SNAPSHOT"))
-  runtimeDownloadOnlyApi(configurate("yaml", "4.2.0-SNAPSHOT"))
-  runtimeDownloadOnlyApi(configurate("extra-kotlin", "4.2.0-SNAPSHOT"))
+  runtimeDownloadOnlyApi(configurate("hocon", libs.versions.configurate))
+  runtimeDownloadOnlyApi(configurate("yaml", libs.versions.configurate))
+  runtimeDownloadOnlyApi(configurate("extra-kotlin", libs.versions.configurate))
   runtimeDownloadOnlyApi(cloud("paper", "2.0.0-SNAPSHOT"))
   runtimeDownloadOnlyApi("org.bstats:bstats-bukkit:3.1.0")
   implementation(libs.papertrail)
@@ -68,7 +68,7 @@ mizulePaperPlatform {
   this.version.set(libs.versions.minecraft.get())
   this.commonPlugins.set(false)
   this.extraPlugins.add(
-    "https://ci.extendedclip.com/job/PlaceholderAPI/lastSuccessfulBuild/artifact/build/libs/PlaceholderAPI-2.11.7-DEV-208.jar"
+    "https://ci.extendedclip.com/job/PlaceholderAPI/lastSuccessfulBuild/artifact/build/libs/PlaceholderAPI-2.11.7-DEV-212.jar"
   )
 }
 

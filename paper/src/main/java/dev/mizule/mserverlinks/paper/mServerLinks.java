@@ -28,6 +28,7 @@ import dev.mizule.mserverlinks.bukkit.util.MetricsUtil;
 import dev.mizule.mserverlinks.core.Constants;
 import dev.mizule.mserverlinks.core.util.UpdateUtil;
 import dev.mizule.mserverlinks.paper.listener.LinkListener;
+import io.papermc.paper.ServerBuildInfo;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,6 +40,14 @@ public class mServerLinks extends JavaPlugin {
 
     private final PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager;
     private final mServerLinksBootstrapper bootstrapper;
+    private boolean shouldDisable = false;
+    private final String[] messages = {
+      "*".repeat(64),
+      "This server is running an unsupported version of Paper!",
+      "This version of mServerLinks only supports Paper 1.21 up to 1.21.6!",
+      "If you are running a newer version, please update mServerLinks to the latest version!",
+      "*".repeat(64)
+  };
 
     public mServerLinks(
         final mServerLinksBootstrapper bootstrapper
@@ -48,7 +57,25 @@ public class mServerLinks extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+      if (Bukkit.getUnsafe().getDataVersion() > 4435) {
+        for (final String message : messages) {
+          getSLF4JLogger().error(message);
+        }
+        shouldDisable = true;
+      }
+    }
+
+    @Override
     public void onEnable() {
+      if ((Bukkit.getUnsafe().getDataVersion() > 4435) || shouldDisable) {
+        for (final String message : messages) {
+          getSLF4JLogger().error(message);
+        }
+        Bukkit.getPluginManager().disablePlugin(this);
+        return;
+      }
+
         this.commandManager.onEnable();
         getLogger().info("mServerLinks has been enabled!");
         if (this.bootstrapper.config().get().bStats()) {

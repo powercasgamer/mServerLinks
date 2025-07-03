@@ -10,6 +10,8 @@ slf4j = "2.0.17"
 bstats = "3.1.0"
 placeholderapi = "2.11.6"
 miniplaceholders = "2.3.0"
+configurate = "4.2.0"
+adventure = "4.23.0"
 
 [libraries]
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
