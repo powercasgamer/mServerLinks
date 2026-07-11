@@ -14,8 +14,8 @@ plugins {
 
 dependencies {
   api(projects.mserverlinksCore)
-  compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
-  annotationProcessor("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
+  compileOnly("com.velocitypowered:velocity-api:3.5.1")
+  annotationProcessor("com.velocitypowered:velocity-api:3.5.1")
   runtimeDownloadOnlyApi(kotlin("stdlib-jdk8"))
   runtimeDownloadOnlyApi(configurate("hocon", libs.versions.configurate))
   runtimeDownloadOnlyApi(configurate("extra-kotlin", libs.versions.configurate))
